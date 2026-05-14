@@ -1,0 +1,110 @@
+2026-05-03 21:28:21,491 - main - INFO - === Logging system initialized ===
+2026-05-03 21:28:21,491 - main - INFO - Log file: logs/app_20260503_212821.log
+2026-05-03 21:28:21,491 - main - INFO - Log level: INFO
+2026-05-03 21:28:21,491 - main - INFO - Timestamp: 20260503_212821
+2026-05-03 21:28:24,452 - main - INFO - Included router: routers.aihub.router
+2026-05-03 21:28:24,468 - main - INFO - Included router: routers.auth.router
+2026-05-03 21:28:24,468 - main - INFO - Included router: routers.health.router
+2026-05-03 21:28:24,475 - main - INFO - Included router: routers.portfolio.router
+2026-05-03 21:28:24,500 - main - INFO - Included router: routers.settings.router
+2026-05-03 21:28:24,534 - main - INFO - Included router: routers.storage.router
+2026-05-03 21:28:24,546 - main - INFO - Included router: routers.user.router
+2026-05-03 21:28:24,546 - main - INFO - === Application startup initiated ===
+2026-05-03 21:28:24,546 - services.database - DEBUG - [DB_OP] Starting database initialization
+2026-05-03 21:28:24,546 - services.database - INFO - 🔧 Starting database initialization...
+2026-05-03 21:28:24,546 - core.database - INFO - Starting database initialization...
+2026-05-03 21:28:24,546 - core.database - INFO - Normalizing database URL for async compatibility...
+2026-05-03 21:28:24,551 - core.database - DEBUG - Database exists:./app.db
+2026-05-03 21:28:24,551 - core.database - INFO - Creating async database engine...
+2026-05-03 21:28:24,551 - core.database - INFO - Using QueuePool with connection pooling for non-Lambda environment
+2026-05-03 21:28:24,620 - core.database - INFO - Database engine created successfully
+2026-05-03 21:28:24,620 - core.database - INFO - Creating async session maker...
+2026-05-03 21:28:24,620 - core.database - INFO - Async session maker created successfully
+2026-05-03 21:28:24,620 - core.database - INFO - Database connection initialized successfully
+2026-05-03 21:28:24,620 - services.database - INFO - 🔧 Database connection initialized, now creating tables if tables not exist...
+2026-05-03 21:28:24,620 - core.database - DEBUG - [DB_OP] Starting create_tables
+2026-05-03 21:28:24,620 - core.database - INFO - 🔧 Starting table creation...
+2026-05-03 21:28:24,620 - aiosqlite - DEBUG - executing <function connect.<locals>.connector at 0x0000025D53612B60>
+2026-05-03 21:28:24,620 - aiosqlite - DEBUG - operation <function connect.<locals>.connector at 0x0000025D53612B60> completed
+2026-05-03 21:28:24,620 - aiosqlite - DEBUG - executing functools.partial(<built-in method create_function of sqlite3.Connection object at 0x0000025D535DB4C0>, 'regexp', 2, <function SQLiteDialect_pysqlite.on_connect.<locals>.regexp at 0x0000025D53611EE0>, deterministic=True)
+2026-05-03 21:28:24,620 - aiosqlite - DEBUG - operation functools.partial(<built-in method create_function of sqlite3.Connection object at 0x0000025D535DB4C0>, 'regexp', 2, <function SQLiteDialect_pysqlite.on_connect.<locals>.regexp at 0x0000025D53611EE0>, deterministic=True) completed
+2026-05-03 21:28:24,620 - aiosqlite - DEBUG - executing functools.partial(<built-in method create_function of sqlite3.Connection object at 0x0000025D535DB4C0>, 'floor', 1, <built-in function floor>, deterministic=True)
+2026-05-03 21:28:24,620 - aiosqlite - DEBUG - operation functools.partial(<built-in method create_function of sqlite3.Connection object at 0x0000025D535DB4C0>, 'floor', 1, <built-in function floor>, deterministic=True) completed
+2026-05-03 21:28:24,620 - aiosqlite - DEBUG - executing functools.partial(<built-in method cursor of sqlite3.Connection object at 0x0000025D535DB4C0>)
+2026-05-03 21:28:24,620 - aiosqlite - DEBUG - operation functools.partial(<built-in method cursor of sqlite3.Connection object at 0x0000025D535DB4C0>) completed
+2026-05-03 21:28:24,631 - aiosqlite - DEBUG - executing functools.partial(<built-in method execute of sqlite3.Cursor object at 0x0000025D53614940>, 'PRAGMA read_uncommitted', [])
+2026-05-03 21:28:24,635 - aiosqlite - DEBUG - operation functools.partial(<built-in method execute of sqlite3.Cursor object at 0x0000025D53614940>, 'PRAGMA read_uncommitted', []) completed
+2026-05-03 21:28:24,635 - aiosqlite - DEBUG - executing functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x0000025D53614940>)
+2026-05-03 21:28:24,635 - aiosqlite - DEBUG - operation functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x0000025D53614940>) completed
+2026-05-03 21:28:24,637 - aiosqlite - DEBUG - executing functools.partial(<built-in method close of sqlite3.Cursor object at 0x0000025D53614940>)
+2026-05-03 21:28:24,637 - aiosqlite - DEBUG - operation functools.partial(<built-in method close of sqlite3.Cursor object at 0x0000025D53614940>) completed
+2026-05-03 21:28:24,637 - aiosqlite - DEBUG - executing functools.partial(<built-in method rollback of sqlite3.Connection object at 0x0000025D535DB4C0>)
+2026-05-03 21:28:24,639 - aiosqlite - DEBUG - operation functools.partial(<built-in method rollback of sqlite3.Connection object at 0x0000025D535DB4C0>) completed
+2026-05-03 21:28:24,640 - aiosqlite - DEBUG - executing functools.partial(<built-in method cursor of sqlite3.Connection object at 0x0000025D535DB4C0>)
+2026-05-03 21:28:24,640 - aiosqlite - DEBUG - operation functools.partial(<built-in method cursor of sqlite3.Connection object at 0x0000025D535DB4C0>) completed
+2026-05-03 21:28:24,640 - aiosqlite - DEBUG - executing functools.partial(<built-in method execute of sqlite3.Cursor object at 0x0000025D53614940>, 'PRAGMA main.table_info("users")', ())
+2026-05-03 21:28:24,640 - aiosqlite - DEBUG - operation functools.partial(<built-in method execute of sqlite3.Cursor object at 0x0000025D53614940>, 'PRAGMA main.table_info("users")', ()) completed
+2026-05-03 21:28:24,640 - aiosqlite - DEBUG - executing functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x0000025D53614940>)
+2026-05-03 21:28:24,640 - aiosqlite - DEBUG - operation functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x0000025D53614940>) completed
+2026-05-03 21:28:24,645 - aiosqlite - DEBUG - executing functools.partial(<built-in method close of sqlite3.Cursor object at 0x0000025D53614940>)
+2026-05-03 21:28:24,645 - aiosqlite - DEBUG - operation functools.partial(<built-in method close of sqlite3.Cursor object at 0x0000025D53614940>) completed
+2026-05-03 21:28:24,645 - aiosqlite - DEBUG - executing functools.partial(<built-in method cursor of sqlite3.Connection object at 0x0000025D535DB4C0>)
+2026-05-03 21:28:24,645 - aiosqlite - DEBUG - operation functools.partial(<built-in method cursor of sqlite3.Connection object at 0x0000025D535DB4C0>) completed
+2026-05-03 21:28:24,645 - aiosqlite - DEBUG - executing functools.partial(<built-in method execute of sqlite3.Cursor object at 0x0000025D53614940>, 'PRAGMA main.table_info("oidc_states")', ())
+2026-05-03 21:28:24,647 - aiosqlite - DEBUG - operation functools.partial(<built-in method execute of sqlite3.Cursor object at 0x0000025D53614940>, 'PRAGMA main.table_info("oidc_states")', ()) completed
+2026-05-03 21:28:24,647 - aiosqlite - DEBUG - executing functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x0000025D53614940>)
+2026-05-03 21:28:24,647 - aiosqlite - DEBUG - operation functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x0000025D53614940>) completed
+2026-05-03 21:28:24,647 - aiosqlite - DEBUG - executing functools.partial(<built-in method close of sqlite3.Cursor object at 0x0000025D53614940>)
+2026-05-03 21:28:24,649 - aiosqlite - DEBUG - operation functools.partial(<built-in method close of sqlite3.Cursor object at 0x0000025D53614940>) completed
+2026-05-03 21:28:24,649 - core.database - INFO - Tables initialized successfully
+2026-05-03 21:28:24,649 - core.database - DEBUG - [DB_OP] Create tables completed in 0.0289s
+2026-05-03 21:28:24,649 - aiosqlite - DEBUG - executing functools.partial(<built-in method commit of sqlite3.Connection object at 0x0000025D535DB4C0>)
+2026-05-03 21:28:24,650 - aiosqlite - DEBUG - operation functools.partial(<built-in method commit of sqlite3.Connection object at 0x0000025D535DB4C0>) completed
+2026-05-03 21:28:24,651 - aiosqlite - DEBUG - executing functools.partial(<built-in method rollback of sqlite3.Connection object at 0x0000025D535DB4C0>)
+2026-05-03 21:28:24,651 - services.database - INFO - 🔧 Table creation completed
+2026-05-03 21:28:24,651 - aiosqlite - DEBUG - operation functools.partial(<built-in method rollback of sqlite3.Connection object at 0x0000025D535DB4C0>) completed
+2026-05-03 21:28:24,651 - services.database - INFO - Database initialized successfully
+2026-05-03 21:28:24,651 - services.database - DEBUG - [DB_OP] Database initialization completed in 0.1049s
+2026-05-03 21:28:24,651 - services.mock_data - INFO - mock_data directory not found, skipping mock initialization
+2026-05-03 21:28:24,653 - services.database - DEBUG - [DB_OP] Starting database initialization
+2026-05-03 21:28:24,653 - services.database - INFO - 🔧 Starting database initialization...
+2026-05-03 21:28:24,653 - core.database - INFO - Starting database initialization...
+2026-05-03 21:28:24,653 - core.database - INFO - Database already initialized
+2026-05-03 21:28:24,653 - services.database - INFO - 🔧 Database connection initialized, now creating tables if tables not exist...
+2026-05-03 21:28:24,653 - core.database - DEBUG - [DB_OP] Starting create_tables
+2026-05-03 21:28:24,653 - core.database - INFO - Tables already initialized
+2026-05-03 21:28:24,653 - services.database - INFO - 🔧 Table creation completed
+2026-05-03 21:28:24,653 - services.database - INFO - Database initialized successfully
+2026-05-03 21:28:24,653 - services.database - DEBUG - [DB_OP] Database initialization completed in 0.0000s
+2026-05-03 21:28:24,653 - services.auth - WARNING - Admin user ID or email not configured, skipping admin initialization
+2026-05-03 21:28:24,655 - main - INFO - === Application startup completed successfully ===
+2026-05-03 21:28:55,236 - httpcore.connection - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=300 socket_options=None
+2026-05-03 21:28:55,497 - httpcore.connection - DEBUG - connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000025D53630530>
+2026-05-03 21:28:55,497 - httpcore.http11 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2026-05-03 21:28:55,497 - httpcore.http11 - DEBUG - send_request_headers.complete
+2026-05-03 21:28:55,499 - httpcore.http11 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2026-05-03 21:28:55,499 - httpcore.http11 - DEBUG - send_request_body.complete
+2026-05-03 21:28:55,499 - httpcore.http11 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2026-05-03 21:29:35,077 - httpcore.http11 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sun, 03 May 2026 15:59:35 GMT'), (b'Transfer-Encoding', b'chunked')])
+2026-05-03 21:29:35,080 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+2026-05-03 21:29:35,081 - httpcore.http11 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2026-05-03 21:29:35,081 - httpcore.http11 - DEBUG - receive_response_body.complete
+2026-05-03 21:29:35,082 - httpcore.http11 - DEBUG - response_closed.started
+2026-05-03 21:29:35,082 - httpcore.http11 - DEBUG - response_closed.complete
+2026-05-03 21:29:35,083 - httpcore.connection - DEBUG - close.started
+2026-05-03 21:29:35,084 - httpcore.connection - DEBUG - close.complete
+2026-05-03 21:29:35,489 - httpcore.connection - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=300 socket_options=None
+2026-05-03 21:29:35,765 - httpcore.connection - DEBUG - connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000025D5370F830>
+2026-05-03 21:29:35,765 - httpcore.http11 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2026-05-03 21:29:35,765 - httpcore.http11 - DEBUG - send_request_headers.complete
+2026-05-03 21:29:35,767 - httpcore.http11 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2026-05-03 21:29:35,767 - httpcore.http11 - DEBUG - send_request_body.complete
+2026-05-03 21:29:35,768 - httpcore.http11 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2026-05-03 21:30:26,654 - httpcore.http11 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sun, 03 May 2026 16:00:26 GMT'), (b'Transfer-Encoding', b'chunked')])
+2026-05-03 21:30:26,654 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+2026-05-03 21:30:26,654 - httpcore.http11 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2026-05-03 21:30:26,654 - httpcore.http11 - DEBUG - receive_response_body.complete
+2026-05-03 21:30:26,654 - httpcore.http11 - DEBUG - response_closed.started
+2026-05-03 21:30:26,654 - httpcore.http11 - DEBUG - response_closed.complete
+2026-05-03 21:30:26,654 - httpcore.connection - DEBUG - close.started
+2026-05-03 21:30:26,654 - httpcore.connection - DEBUG - close.complete

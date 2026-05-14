@@ -1,0 +1,134 @@
+2026-05-03 17:11:02,300 - main - INFO - === Logging system initialized ===
+2026-05-03 17:11:02,300 - main - INFO - Log file: logs/app_20260503_171102.log
+2026-05-03 17:11:02,301 - main - INFO - Log level: INFO
+2026-05-03 17:11:02,301 - main - INFO - Timestamp: 20260503_171102
+2026-05-03 17:11:02,727 - main - INFO - Included router: routers.aihub.router
+2026-05-03 17:11:02,747 - main - INFO - Included router: routers.auth.router
+2026-05-03 17:11:02,748 - main - INFO - Included router: routers.health.router
+2026-05-03 17:11:02,749 - main - INFO - Included router: routers.portfolio.router
+2026-05-03 17:11:02,762 - main - INFO - Included router: routers.settings.router
+2026-05-03 17:11:02,782 - main - INFO - Included router: routers.storage.router
+2026-05-03 17:11:02,782 - main - INFO - Included router: routers.user.router
+2026-05-03 17:11:02,782 - main - INFO - === Application startup initiated ===
+2026-05-03 17:11:02,782 - services.database - DEBUG - [DB_OP] Starting database initialization
+2026-05-03 17:11:02,782 - services.database - INFO - 🔧 Starting database initialization...
+2026-05-03 17:11:02,788 - core.database - INFO - Starting database initialization...
+2026-05-03 17:11:02,788 - core.database - INFO - Normalizing database URL for async compatibility...
+2026-05-03 17:11:02,788 - core.database - DEBUG - Database exists:./app.db
+2026-05-03 17:11:02,788 - core.database - INFO - Creating async database engine...
+2026-05-03 17:11:02,788 - core.database - INFO - Using QueuePool with connection pooling for non-Lambda environment
+2026-05-03 17:11:02,793 - core.database - INFO - Database engine created successfully
+2026-05-03 17:11:02,793 - core.database - INFO - Creating async session maker...
+2026-05-03 17:11:02,793 - core.database - INFO - Async session maker created successfully
+2026-05-03 17:11:02,793 - core.database - INFO - Database connection initialized successfully
+2026-05-03 17:11:02,793 - services.database - INFO - 🔧 Database connection initialized, now creating tables if tables not exist...
+2026-05-03 17:11:02,793 - core.database - DEBUG - [DB_OP] Starting create_tables
+2026-05-03 17:11:02,793 - core.database - INFO - 🔧 Starting table creation...
+2026-05-03 17:11:02,801 - aiosqlite - DEBUG - executing <function connect.<locals>.connector at 0x000001C984172980>
+2026-05-03 17:11:02,802 - aiosqlite - DEBUG - operation <function connect.<locals>.connector at 0x000001C984172980> completed
+2026-05-03 17:11:02,802 - aiosqlite - DEBUG - executing functools.partial(<built-in method create_function of sqlite3.Connection object at 0x000001C9841374C0>, 'regexp', 2, <function SQLiteDialect_pysqlite.on_connect.<locals>.regexp at 0x000001C984171D00>, deterministic=True)
+2026-05-03 17:11:02,803 - aiosqlite - DEBUG - operation functools.partial(<built-in method create_function of sqlite3.Connection object at 0x000001C9841374C0>, 'regexp', 2, <function SQLiteDialect_pysqlite.on_connect.<locals>.regexp at 0x000001C984171D00>, deterministic=True) completed
+2026-05-03 17:11:02,803 - aiosqlite - DEBUG - executing functools.partial(<built-in method create_function of sqlite3.Connection object at 0x000001C9841374C0>, 'floor', 1, <built-in function floor>, deterministic=True)
+2026-05-03 17:11:02,803 - aiosqlite - DEBUG - operation functools.partial(<built-in method create_function of sqlite3.Connection object at 0x000001C9841374C0>, 'floor', 1, <built-in function floor>, deterministic=True) completed
+2026-05-03 17:11:02,803 - aiosqlite - DEBUG - executing functools.partial(<built-in method cursor of sqlite3.Connection object at 0x000001C9841374C0>)
+2026-05-03 17:11:02,803 - aiosqlite - DEBUG - operation functools.partial(<built-in method cursor of sqlite3.Connection object at 0x000001C9841374C0>) completed
+2026-05-03 17:11:02,803 - aiosqlite - DEBUG - executing functools.partial(<built-in method execute of sqlite3.Cursor object at 0x000001C98417C540>, 'PRAGMA read_uncommitted', [])
+2026-05-03 17:11:02,803 - aiosqlite - DEBUG - operation functools.partial(<built-in method execute of sqlite3.Cursor object at 0x000001C98417C540>, 'PRAGMA read_uncommitted', []) completed
+2026-05-03 17:11:02,803 - aiosqlite - DEBUG - executing functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x000001C98417C540>)
+2026-05-03 17:11:02,803 - aiosqlite - DEBUG - operation functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x000001C98417C540>) completed
+2026-05-03 17:11:02,803 - aiosqlite - DEBUG - executing functools.partial(<built-in method close of sqlite3.Cursor object at 0x000001C98417C540>)
+2026-05-03 17:11:02,803 - aiosqlite - DEBUG - operation functools.partial(<built-in method close of sqlite3.Cursor object at 0x000001C98417C540>) completed
+2026-05-03 17:11:02,804 - aiosqlite - DEBUG - executing functools.partial(<built-in method rollback of sqlite3.Connection object at 0x000001C9841374C0>)
+2026-05-03 17:11:02,804 - aiosqlite - DEBUG - operation functools.partial(<built-in method rollback of sqlite3.Connection object at 0x000001C9841374C0>) completed
+2026-05-03 17:11:02,804 - aiosqlite - DEBUG - executing functools.partial(<built-in method cursor of sqlite3.Connection object at 0x000001C9841374C0>)
+2026-05-03 17:11:02,804 - aiosqlite - DEBUG - operation functools.partial(<built-in method cursor of sqlite3.Connection object at 0x000001C9841374C0>) completed
+2026-05-03 17:11:02,805 - aiosqlite - DEBUG - executing functools.partial(<built-in method execute of sqlite3.Cursor object at 0x000001C98417C540>, 'PRAGMA main.table_info("users")', ())
+2026-05-03 17:11:02,805 - aiosqlite - DEBUG - operation functools.partial(<built-in method execute of sqlite3.Cursor object at 0x000001C98417C540>, 'PRAGMA main.table_info("users")', ()) completed
+2026-05-03 17:11:02,805 - aiosqlite - DEBUG - executing functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x000001C98417C540>)
+2026-05-03 17:11:02,805 - aiosqlite - DEBUG - operation functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x000001C98417C540>) completed
+2026-05-03 17:11:02,805 - aiosqlite - DEBUG - executing functools.partial(<built-in method close of sqlite3.Cursor object at 0x000001C98417C540>)
+2026-05-03 17:11:02,805 - aiosqlite - DEBUG - operation functools.partial(<built-in method close of sqlite3.Cursor object at 0x000001C98417C540>) completed
+2026-05-03 17:11:02,806 - aiosqlite - DEBUG - executing functools.partial(<built-in method cursor of sqlite3.Connection object at 0x000001C9841374C0>)
+2026-05-03 17:11:02,807 - aiosqlite - DEBUG - operation functools.partial(<built-in method cursor of sqlite3.Connection object at 0x000001C9841374C0>) completed
+2026-05-03 17:11:02,807 - aiosqlite - DEBUG - executing functools.partial(<built-in method execute of sqlite3.Cursor object at 0x000001C98417C540>, 'PRAGMA main.table_info("oidc_states")', ())
+2026-05-03 17:11:02,807 - aiosqlite - DEBUG - operation functools.partial(<built-in method execute of sqlite3.Cursor object at 0x000001C98417C540>, 'PRAGMA main.table_info("oidc_states")', ()) completed
+2026-05-03 17:11:02,807 - aiosqlite - DEBUG - executing functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x000001C98417C540>)
+2026-05-03 17:11:02,807 - aiosqlite - DEBUG - operation functools.partial(<built-in method fetchall of sqlite3.Cursor object at 0x000001C98417C540>) completed
+2026-05-03 17:11:02,807 - aiosqlite - DEBUG - executing functools.partial(<built-in method close of sqlite3.Cursor object at 0x000001C98417C540>)
+2026-05-03 17:11:02,808 - aiosqlite - DEBUG - operation functools.partial(<built-in method close of sqlite3.Cursor object at 0x000001C98417C540>) completed
+2026-05-03 17:11:02,808 - core.database - INFO - Tables initialized successfully
+2026-05-03 17:11:02,808 - core.database - DEBUG - [DB_OP] Create tables completed in 0.0144s
+2026-05-03 17:11:02,808 - aiosqlite - DEBUG - executing functools.partial(<built-in method commit of sqlite3.Connection object at 0x000001C9841374C0>)
+2026-05-03 17:11:02,808 - aiosqlite - DEBUG - operation functools.partial(<built-in method commit of sqlite3.Connection object at 0x000001C9841374C0>) completed
+2026-05-03 17:11:02,809 - aiosqlite - DEBUG - executing functools.partial(<built-in method rollback of sqlite3.Connection object at 0x000001C9841374C0>)
+2026-05-03 17:11:02,809 - services.database - INFO - 🔧 Table creation completed
+2026-05-03 17:11:02,809 - aiosqlite - DEBUG - operation functools.partial(<built-in method rollback of sqlite3.Connection object at 0x000001C9841374C0>) completed
+2026-05-03 17:11:02,809 - services.database - INFO - Database initialized successfully
+2026-05-03 17:11:02,809 - services.database - DEBUG - [DB_OP] Database initialization completed in 0.0270s
+2026-05-03 17:11:02,809 - services.mock_data - INFO - mock_data directory not found, skipping mock initialization
+2026-05-03 17:11:02,809 - services.database - DEBUG - [DB_OP] Starting database initialization
+2026-05-03 17:11:02,809 - services.database - INFO - 🔧 Starting database initialization...
+2026-05-03 17:11:02,810 - core.database - INFO - Starting database initialization...
+2026-05-03 17:11:02,810 - core.database - INFO - Database already initialized
+2026-05-03 17:11:02,810 - services.database - INFO - 🔧 Database connection initialized, now creating tables if tables not exist...
+2026-05-03 17:11:02,810 - core.database - DEBUG - [DB_OP] Starting create_tables
+2026-05-03 17:11:02,810 - core.database - INFO - Tables already initialized
+2026-05-03 17:11:02,810 - services.database - INFO - 🔧 Table creation completed
+2026-05-03 17:11:02,810 - services.database - INFO - Database initialized successfully
+2026-05-03 17:11:02,810 - services.database - DEBUG - [DB_OP] Database initialization completed in 0.0009s
+2026-05-03 17:11:02,810 - services.auth - WARNING - Admin user ID or email not configured, skipping admin initialization
+2026-05-03 17:11:02,810 - main - INFO - === Application startup completed successfully ===
+2026-05-03 17:11:20,974 - httpcore.connection - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=300 socket_options=None
+2026-05-03 17:11:21,257 - httpcore.connection - DEBUG - connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C984240620>
+2026-05-03 17:11:21,257 - httpcore.http11 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2026-05-03 17:11:21,257 - httpcore.http11 - DEBUG - send_request_headers.complete
+2026-05-03 17:11:21,257 - httpcore.http11 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2026-05-03 17:11:21,257 - httpcore.http11 - DEBUG - send_request_body.complete
+2026-05-03 17:11:21,257 - httpcore.http11 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2026-05-03 17:12:08,866 - httpcore.http11 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/json; charset=utf-8'), (b'Date', b'Sun, 03 May 2026 11:42:08 GMT'), (b'Transfer-Encoding', b'chunked')])
+2026-05-03 17:12:08,866 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/chat "HTTP/1.1 200 OK"
+2026-05-03 17:12:08,866 - httpcore.http11 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2026-05-03 17:12:08,866 - httpcore.http11 - DEBUG - receive_response_body.complete
+2026-05-03 17:12:08,866 - httpcore.http11 - DEBUG - response_closed.started
+2026-05-03 17:12:08,866 - httpcore.http11 - DEBUG - response_closed.complete
+2026-05-03 17:12:08,866 - httpcore.connection - DEBUG - close.started
+2026-05-03 17:12:08,866 - httpcore.connection - DEBUG - close.complete
+2026-05-03 17:12:13,019 - openai._base_client - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'idempotency_key': 'stainless-python-retry-e39998dd-413b-41a5-896f-c7d23f856819', 'content': None, 'json_data': {'messages': [{'role': 'system', 'content': 'You are an expert career coach and content writer. Return ONLY valid JSON.'}, {'role': 'user', 'content': 'Based on the following parsed resume data, classify the user into one of these categories:\n- "student": Currently in school, no or minimal work experience\n- "fresher": Recently graduated, 0-1 years of experience\n- "professional": 2+ years of work experience\n- "freelancer": Multiple short-term projects, diverse client work\n\nAlso generate enhanced content for their portfolio.\n\nReturn ONLY valid JSON (no markdown, no code blocks):\n{\n  "user_type": "student|fresher|professional|freelancer",\n  "enhanced_bio": "A compelling 2-3 sentence professional bio written in first person",\n  "enhanced_summary": "An engaging professional summary paragraph (3-4 sentences)",\n  "skill_categories": {\n    "Category Name": ["skill1", "skill2"]\n  },\n  "enhanced_projects": [\n    {\n      "name": "Project Name",\n      "enhanced_description": "An improved, more detailed project description (2-3 sentences)",\n      "technologies": ["tech1", "tech2"]\n    }\n  ],\n  "enhanced_experience": [\n    {\n      "company": "Company Name",\n      "role": "Role",\n      "enhanced_description": "Improved role description with impact metrics where possible"\n    }\n  ],\n  "recommended_templates": ["template_id1", "template_id2"],\n  "portfolio_tone": "professional|creative|technical|academic"\n}\n\nResume data:\n{\n  "name": "",\n  "title": "Data Science Using Python - NPTEL (Jul-Oct 2025)",\n  "email": "",\n  "phone": "",\n  "location": "Thanjavur",\n  "linkedin": "",\n  "github": "",\n  "website": "",\n  "summary": "Aspiring Artificial Intelligence and Data Science engineer with hands-on internship experience, proficient in Python and web development.",\n  "skills": [\n    "",\n    ""\n  ],\n  "experience": [\n    {\n      "company": "Nexila Technologies",\n      "role": "Data Science Intern",\n      "duration": "July 2025 - August 2025",\n      "description": "Applied data preprocessing, visualization, and basic predictive modeling techniques.",\n      "highlights": [\n        "data analysis",\n        "machine learning tasks"\n      ]\n    },\n    {\n      "company": "InternPro",\n      "role": "Web Development Intern",\n      "duration": "June 2025 - July 2025",\n      "description": "Gained hands-on experience in web development technologies and internal IT operations.",\n      "highlights": [\n        "web development",\n        "internal IT operations"\n      ]\n    }\n  ],\n  "education": [\n    {\n      "institution": "Panimalar Engineering College, Chennai",\n      "degree": "Bachelor of Technology \\u2013 Artificial Intelligence and Data Science",\n      "duration": "Pre-final Year (2023)",\n      "gpa": "8.1 / 10",\n      "highlights": [\n        "pre-final year",\n        "CGPA"\n      ]\n    }\n  ],\n  "projects": [\n    {\n      "name": "Construction Company Website",\n      "description": "Designed and implemented clean, user-friendly interfaces using HTML5, CSS3, and JavaScript with cross-device compatibility.",\n      "technologies": [\n        "HTML5",\n        "CSS3",\n        "JavaScript"\n      ],\n      "link": ""\n    }\n  ],\n  "certifications": [\n    "",\n    ""\n  ],\n  "languages": [\n    "",\n    ""\n  ],\n  "interests": [\n    "",\n    ""\n  ]\n}'}], 'model': 'deepseek-v3.2', 'max_tokens': 4096, 'stream': False, 'temperature': 0.7}}
+2026-05-03 17:12:13,020 - openai._base_client - DEBUG - Sending HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/openai/chat/completions
+2026-05-03 17:12:13,020 - httpcore.connection - DEBUG - connect_tcp.started host='generativelanguage.googleapis.com' port=443 local_address=None timeout=5.0 socket_options=None
+2026-05-03 17:12:13,399 - httpcore.connection - DEBUG - connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C98478EFF0>
+2026-05-03 17:12:13,399 - httpcore.connection - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C9841DEF50> server_hostname='generativelanguage.googleapis.com' timeout=5.0
+2026-05-03 17:12:13,733 - httpcore.connection - DEBUG - start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C9846EA330>
+2026-05-03 17:12:13,733 - httpcore.http11 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2026-05-03 17:12:13,733 - httpcore.http11 - DEBUG - send_request_headers.complete
+2026-05-03 17:12:13,733 - httpcore.http11 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2026-05-03 17:12:13,733 - httpcore.http11 - DEBUG - send_request_body.complete
+2026-05-03 17:12:13,733 - httpcore.http11 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2026-05-03 17:12:14,204 - httpcore.http11 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 404, b'Not Found', [(b'Vary', b'Origin'), (b'Vary', b'X-Origin'), (b'Vary', b'Referer'), (b'Content-Type', b'application/json; charset=UTF-8'), (b'Content-Encoding', b'gzip'), (b'Date', b'Sun, 03 May 2026 11:42:14 GMT'), (b'Server', b'scaffolding on HTTPServer2'), (b'X-XSS-Protection', b'0'), (b'X-Frame-Options', b'SAMEORIGIN'), (b'X-Content-Type-Options', b'nosniff'), (b'Server-Timing', b'gfet4t7; dur=271'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), (b'Transfer-Encoding', b'chunked')])
+2026-05-03 17:12:14,204 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/openai/chat/completions "HTTP/1.1 404 Not Found"
+2026-05-03 17:12:14,204 - httpcore.http11 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2026-05-03 17:12:14,346 - httpcore.http11 - DEBUG - receive_response_body.complete
+2026-05-03 17:12:14,346 - httpcore.http11 - DEBUG - response_closed.started
+2026-05-03 17:12:14,362 - httpcore.http11 - DEBUG - response_closed.complete
+2026-05-03 17:12:14,362 - openai._base_client - DEBUG - HTTP Response: POST https://generativelanguage.googleapis.com/v1beta/openai/chat/completions "404 Not Found" Headers([('vary', 'Origin'), ('vary', 'X-Origin'), ('vary', 'Referer'), ('content-type', 'application/json; charset=UTF-8'), ('content-encoding', 'gzip'), ('date', 'Sun, 03 May 2026 11:42:14 GMT'), ('server', 'scaffolding on HTTPServer2'), ('x-xss-protection', '0'), ('x-frame-options', 'SAMEORIGIN'), ('x-content-type-options', 'nosniff'), ('server-timing', 'gfet4t7; dur=271'), ('alt-svc', 'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000'), ('transfer-encoding', 'chunked')])
+2026-05-03 17:12:14,362 - openai._base_client - DEBUG - request_id: None
+2026-05-03 17:12:14,362 - openai._base_client - DEBUG - Encountered httpx.HTTPStatusError
+Traceback (most recent call last):
+  File "C:\Users\ariya\OneDrive\Desktop\project\Resume_To_Portfolio\app\backend\.venv\Lib\site-packages\openai\_base_client.py", line 1646, in request
+    response.raise_for_status()
+  File "C:\Users\ariya\OneDrive\Desktop\project\Resume_To_Portfolio\app\backend\.venv\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-03 17:12:14,362 - openai._base_client - DEBUG - Not retrying
+2026-05-03 17:12:14,362 - openai._base_client - DEBUG - Re-raising status error
+2026-05-03 17:12:14,362 - services.aihub - ERROR - gentxt error: Error code: 404 - [{'error': {'code': 404, 'message': 'models/deepseek-v3.2 is not found for API version v1main, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}]
+2026-05-03 17:12:14,366 - routers.portfolio - ERROR - Resume parsing error: Error code: 404 - [{'error': {'code': 404, 'message': 'models/deepseek-v3.2 is not found for API version v1main, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}]
+2026-05-03 17:14:40,576 - services.database - DEBUG - [DB_OP] Starting database close
+2026-05-03 17:14:40,576 - aiosqlite - DEBUG - executing functools.partial(<built-in method close of sqlite3.Connection object at 0x000001C9841374C0>)
+2026-05-03 17:14:40,582 - aiosqlite - DEBUG - operation functools.partial(<built-in method close of sqlite3.Connection object at 0x000001C9841374C0>) completed
+2026-05-03 17:14:40,582 - aiosqlite - DEBUG - executing <function Connection.stop.<locals>.close_and_stop at 0x000001C984173B00>
+2026-05-03 17:14:40,582 - core.database - INFO - Database connection closed and engine disposed
+2026-05-03 17:14:40,582 - aiosqlite - DEBUG - operation <function Connection.stop.<locals>.close_and_stop at 0x000001C984173B00> completed
+2026-05-03 17:14:40,582 - services.database - INFO - Database connections closed
+2026-05-03 17:14:40,584 - services.database - DEBUG - [DB_OP] Database close completed in 0.0080s

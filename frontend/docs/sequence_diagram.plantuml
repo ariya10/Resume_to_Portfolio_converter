@@ -1,0 +1,148 @@
+@startuml Sequence Diagram
+
+skinparam backgroundColor #1a1a2e
+skinparam fontColor #e6edf3
+skinparam participantBackgroundColor #161b22
+skinparam participantBorderColor #58a6ff
+skinparam arrowColor #8b949e
+skinparam lifeLineBorderColor #30363d
+skinparam noteBackgroundColor #0d1117
+skinparam noteBorderColor #30363d
+
+actor User
+participant "Builder Page" as Builder
+participant "Template Registry" as Registry
+participant "Components Panel" as CompPanel
+participant "DnD Engine" as DnD
+participant "Styling Panel" as StylePanel
+participant "Editor Store" as Store
+participant "Template Renderer" as Renderer
+participant "Animation Controller" as AnimCtrl
+participant "Image Service" as ImgSvc
+participant "Live Preview" as Preview
+participant "Atoms Cloud API" as API
+
+== INITIALIZATION ==
+
+User -> Builder: Navigate to Builder with resume data
+Builder -> Store: Initialize EditorState
+Store --> Builder: Default state
+Builder -> Registry: getByUserType(userType)
+Registry --> Builder: Recommended templates[]
+Builder -> Renderer: render(data, templateConfig, customization)
+Renderer -> AnimCtrl: getAnimationScript(profile)
+AnimCtrl --> Renderer: CSS + JS animation code
+Renderer --> Builder: Generated HTML
+Builder -> Preview: Load HTML in iframe
+
+== TEMPLATE SELECTION ==
+
+User -> Builder: Select template from gallery
+Builder -> Registry: getById(templateId)
+Registry --> Builder: TemplateConfig
+Builder -> Store: updateCustomization(defaultForTemplate)
+Store --> Builder: Updated state
+Builder -> Renderer: render(data, newTemplateConfig, newCustomization)
+Renderer --> Builder: New HTML
+Builder -> Preview: Reload iframe with new HTML
+
+== DRAG & DROP SECTION REORDER ==
+
+User -> CompPanel: Drag "Projects" section
+CompPanel -> DnD: onDragStart(sectionId="projects")
+DnD -> Store: setDraggedSection("projects")
+User -> Preview: Drop between "Skills" and "Experience"
+Preview -> DnD: onDrop(targetIndex=2)
+DnD -> Store: reorderSections("projects", 2)
+Store --> Builder: Updated section order
+Builder -> Renderer: render(data, config, updatedCustomization)
+Renderer --> Builder: Reordered HTML
+Builder -> Preview: Reload iframe
+
+== INLINE EDITING ==
+
+User -> Preview: Click on "About" section text
+Preview -> Builder: onSectionClick(sectionId="about")
+Builder -> Store: setActiveSection("about")
+Store --> StylePanel: Active section changed
+User -> Preview: Edit text inline
+Preview -> Builder: onContentChange(field="bio", value="...")
+Builder -> Store: updatePortfolioData({bio: "..."})
+Store --> Builder: Updated data
+Builder -> Renderer: render(updatedData, config, customization)
+Renderer --> Builder: Updated HTML
+Builder -> Preview: Reload iframe
+
+== STYLING PANEL INTERACTION ==
+
+User -> StylePanel: Change primary color to #FF6B6B
+StylePanel -> Store: updateColors({primary: "#FF6B6B"})
+Store --> Builder: Updated customization
+Builder -> Renderer: render(data, config, updatedCustomization)
+Renderer --> Builder: HTML with new color
+Builder -> Preview: Reload iframe
+
+User -> StylePanel: Enable glassmorphism
+StylePanel -> Store: updateVisualStyle({glassmorphism: {enabled: true, blur: 12}})
+Store --> Builder: Updated visual style
+Builder -> Renderer: render(data, config, updatedCustomization)
+Renderer --> Builder: HTML with glassmorphism CSS
+Builder -> Preview: Reload iframe
+
+User -> StylePanel: Change animation to "Fade Up"
+StylePanel -> Store: updateAnimation({scrollTrigger: {type: FADE_UP}})
+Store --> Builder: Updated animation profile
+Builder -> Renderer: render(data, config, updatedCustomization)
+Renderer -> AnimCtrl: getAnimationScript(newProfile)
+AnimCtrl --> Renderer: Updated animation CSS + JS
+Renderer --> Builder: HTML with new animations
+Builder -> Preview: Reload iframe
+
+== IMAGE UPLOAD ==
+
+User -> StylePanel: Click "Upload Profile Image"
+StylePanel -> ImgSvc: selectFile()
+ImgSvc -> User: File picker dialog
+User -> ImgSvc: Select image file
+ImgSvc -> ImgSvc: validate(file)
+note right
+    Input: {
+        file: File,
+        maxSize: 5MB,
+        allowedTypes: ["image/png", "image/jpeg", "image/webp"]
+    }
+end note
+ImgSvc -> ImgSvc: resize(file, 800, 800)
+ImgSvc -> API: upload(resizedFile)
+API --> ImgSvc: {url: "https://atoms.cloud/..."}
+ImgSvc -> Store: updateProfileImage(url)
+Store --> Builder: Updated customization
+Builder -> Renderer: render(data, config, {profileImage: url})
+Renderer --> Builder: HTML with <img> tag injected
+Builder -> Preview: Reload iframe
+
+== EXPORT PORTFOLIO ==
+
+User -> Builder: Click "Export HTML"
+Builder -> Renderer: render(data, templateConfig, customization)
+Renderer -> AnimCtrl: getFullAnimationBundle()
+AnimCtrl --> Renderer: Complete CSS + JS
+Renderer --> Builder: Final standalone HTML
+Builder -> User: Download HTML file
+note right
+    Output: {
+        filename: "john-doe-portfolio.html",
+        content: "<!DOCTYPE html>...",
+        size: "~150KB"
+    }
+end note
+
+== RESPONSIVE PREVIEW ==
+
+User -> Builder: Switch to mobile viewport
+Builder -> Store: setViewport(MOBILE)
+Store --> Builder: Updated viewport
+Builder -> Preview: Set iframe width to 375px
+Preview --> User: Mobile layout rendered
+
+@enduml

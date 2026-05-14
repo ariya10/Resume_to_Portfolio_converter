@@ -1,0 +1,125 @@
+@startuml UI Navigation Flow
+
+skinparam backgroundColor #1a1a2e
+skinparam fontColor #e6edf3
+skinparam stateBackgroundColor #161b22
+skinparam stateBorderColor #58a6ff
+skinparam arrowColor #8b949e
+skinparam noteBackgroundColor #0d1117
+skinparam noteBorderColor #30363d
+
+state "Builder Page" as Builder {
+    state "Top Bar" as TopBar
+    state "Left Sidebar" as Sidebar
+    state "Live Preview Canvas" as Preview
+}
+
+state Sidebar {
+    state "Templates Panel" as Templates
+    state "Components Panel" as Components
+    state "Styling Panel" as Styles
+    state "Animations Panel" as Animations
+    state "Layout Panel" as Layout
+}
+
+state Templates {
+    state "Template Gallery" as Gallery
+    state "Template Preview Modal" as TemplateModal
+    state "Category Filter" as CategoryFilter
+}
+
+state Components {
+    state "Section List (Draggable)" as SectionList
+    state "Section Visibility Toggle" as SectionToggle
+}
+
+state Styles {
+    state "Color Controls" as Colors
+    state "Font Library" as Fonts
+    state "Visual Effects" as Effects
+    state "Image Upload" as ImageUpload
+}
+
+state Animations {
+    state "Scroll Animations" as ScrollAnim
+    state "Hover Effects" as HoverEffects
+    state "Page Transitions" as Transitions
+    state "Stagger Settings" as StaggerSettings
+}
+
+state Layout {
+    state "Layout Type Selector" as LayoutType
+    state "Viewport Switcher" as Viewport
+    state "Section Reorder" as Reorder
+}
+
+state Preview {
+    state "Desktop View" as DesktopView
+    state "Tablet View" as TabletView
+    state "Mobile View" as MobileView
+    state "Inline Edit Mode" as InlineEdit
+}
+
+state "Export Dialog" as Export
+
+[*] --> Builder
+
+Builder --> TopBar : always visible
+Builder --> Sidebar : always visible
+Builder --> Preview : always visible
+
+Sidebar --> Templates : tap Templates tab
+Sidebar --> Components : tap Components tab
+Sidebar --> Styles : tap Styles tab
+Sidebar --> Animations : tap Animations tab
+Sidebar --> Layout : tap Layout tab
+
+Templates --> Gallery : default view
+Gallery --> CategoryFilter : tap filter
+CategoryFilter --> Gallery : select category
+Gallery --> TemplateModal : tap preview thumbnail
+TemplateModal --> Gallery : close modal
+Gallery --> Components : select template (auto-switch)
+
+Components --> SectionList : default view
+SectionList --> SectionToggle : toggle visibility
+SectionList --> Preview : drag section to reorder
+
+Styles --> Colors : default view
+Colors --> Fonts : tap Fonts tab
+Fonts --> Effects : tap Effects tab
+Effects --> ImageUpload : tap Image tab
+ImageUpload --> Effects : back
+
+Animations --> ScrollAnim : default view
+ScrollAnim --> HoverEffects : tap Hover tab
+HoverEffects --> Transitions : tap Transitions tab
+Transitions --> StaggerSettings : tap Stagger tab
+
+Layout --> LayoutType : default view
+LayoutType --> Viewport : tap viewport buttons
+Viewport --> Reorder : tap reorder
+LayoutType --> Preview : change layout type
+
+Preview --> DesktopView : default
+Preview --> TabletView : tap tablet icon
+Preview --> MobileView : tap mobile icon
+DesktopView --> InlineEdit : click section text
+TabletView --> InlineEdit : click section text
+MobileView --> InlineEdit : click section text
+InlineEdit --> Preview : click outside / Esc
+
+TopBar --> Export : tap Export HTML
+Export --> TopBar : close dialog
+
+' Back navigation
+Templates --> Components : tab switch
+Components --> Styles : tab switch
+Styles --> Animations : tab switch
+Animations --> Layout : tab switch
+Layout --> Templates : tab switch
+
+TemplateModal --> Gallery : back
+InlineEdit --> DesktopView : save/cancel
+
+@enduml

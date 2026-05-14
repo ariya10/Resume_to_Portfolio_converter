@@ -1,0 +1,125 @@
+@startuml System Architecture
+!define RECTANGLE class
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #1a1a2e
+skinparam fontColor #e6edf3
+skinparam componentBackgroundColor #161b22
+skinparam componentBorderColor #58a6ff
+skinparam arrowColor #8b949e
+skinparam packageBackgroundColor #0d1117
+skinparam packageBorderColor #30363d
+
+package "Frontend - React + TypeScript" {
+    package "Builder Page" {
+        [TopBar] as topbar
+        [ComponentsPanel] as compPanel
+        [LivePreviewCanvas] as preview
+        [StylingPanel] as stylePanel
+        [TemplateGallery] as templateGallery
+    }
+
+    package "Template System" {
+        [TemplateRegistry] as registry
+        [22 Template Definitions] as templates
+        [TemplateRenderer] as renderer
+    }
+
+    package "Drag & Drop Editor" {
+        [DndContext] as dnd
+        [SectionDraggable] as sectionDrag
+        [SectionDroppable] as sectionDrop
+        [InlineEditor] as inlineEdit
+    }
+
+    package "Animation System" {
+        [ScrollAnimator] as scrollAnim
+        [HoverInteractions] as hoverAnim
+        [PageTransitions] as pageTrans
+        [StaggerReveal] as staggerReveal
+        [AnimationController] as animController
+    }
+
+    package "Visual Enhancement System" {
+        [GradientEngine] as gradient
+        [GlassmorphismEngine] as glass
+        [ShadowEngine] as shadow
+        [BentoGridLayout] as bento
+        [AuroraBackground] as aurora
+        [MeshGradientEngine] as mesh
+    }
+
+    package "Image Upload" {
+        [ImageUploader] as imgUpload
+        [ImageProcessor] as imgProcess
+        [ImageStorage] as imgStore
+    }
+
+    package "State Management" {
+        [PortfolioStore] as store
+        [CustomizationStore] as customStore
+        [EditorStore] as editorStore
+    }
+}
+
+package "Backend - FastAPI" {
+    [Resume Parser API] as parser
+    [AI Enhancement API] as aiEnhance
+    [Image Upload API] as imgAPI
+    [Export API] as exportAPI
+}
+
+package "Atoms Cloud" {
+    [File Storage] as atomsFile
+    [AI Services] as atomsAI
+    [Database] as atomsDB
+}
+
+' Builder page connections
+topbar --> preview : controls
+compPanel --> dnd : drag sections
+dnd --> preview : drop reorder
+stylePanel --> customStore : update styles
+templateGallery --> registry : select template
+inlineEdit --> store : edit content
+
+' Template system connections
+registry --> templates : lookup
+templates --> renderer : config
+renderer --> preview : render HTML
+customStore --> renderer : apply styles
+
+' Animation connections
+animController --> scrollAnim : configure
+animController --> hoverAnim : configure
+animController --> pageTrans : configure
+animController --> staggerReveal : configure
+animController --> renderer : inject animations
+
+' Visual enhancement connections
+renderer --> gradient : apply
+renderer --> glass : apply
+renderer --> shadow : apply
+renderer --> bento : apply
+renderer --> aurora : apply
+renderer --> mesh : apply
+
+' Image connections
+imgUpload --> imgProcess : validate & resize
+imgProcess --> imgAPI : upload
+imgAPI --> atomsFile : store
+imgStore --> renderer : inject into template
+
+' State connections
+store --> renderer : portfolio data
+customStore --> renderer : customization
+editorStore --> compPanel : section order
+editorStore --> stylePanel : active section
+
+' Backend connections
+parser --> atomsAI : deepseek-v3.2 [gentxt]
+aiEnhance --> atomsAI : deepseek-v3.2 [gentxt]
+imgAPI --> atomsFile : persist
+exportAPI --> atomsDB : save portfolio
+
+@enduml

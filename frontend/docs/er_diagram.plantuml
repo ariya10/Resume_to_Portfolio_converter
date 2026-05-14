@@ -1,0 +1,216 @@
+@startuml ER Diagram
+
+skinparam backgroundColor #1a1a2e
+skinparam fontColor #e6edf3
+skinparam entityBackgroundColor #161b22
+skinparam entityBorderColor #58a6ff
+skinparam arrowColor #8b949e
+
+entity "Portfolios" as portfolios {
+    * id : uuid <<PK>>
+    --
+    * user_id : uuid <<FK>>
+    * template_id : varchar <<FK>>
+    * name : varchar
+    * title : varchar
+    * email : varchar
+    phone : varchar
+    location : varchar
+    linkedin : varchar
+    github : varchar
+    website : varchar
+    summary : text
+    bio : text
+    profile_image_url : varchar
+    * user_type : varchar
+    portfolio_tone : varchar
+    * created_at : timestamp
+    * updated_at : timestamp
+}
+
+entity "PortfolioSections" as sections {
+    * id : uuid <<PK>>
+    --
+    * portfolio_id : uuid <<FK>>
+    * section_type : varchar
+    * visible : boolean
+    * sort_order : integer
+    * layout_variant : varchar
+    custom_content : jsonb
+    * created_at : timestamp
+}
+
+entity "PortfolioSkills" as skills {
+    * id : uuid <<PK>>
+    --
+    * portfolio_id : uuid <<FK>>
+    * category : varchar
+    * skill_name : varchar
+    * sort_order : integer
+}
+
+entity "PortfolioExperience" as experience {
+    * id : uuid <<PK>>
+    --
+    * portfolio_id : uuid <<FK>>
+    * company : varchar
+    * role : varchar
+    * duration : varchar
+    description : text
+    highlights : jsonb
+    * sort_order : integer
+}
+
+entity "PortfolioEducation" as education {
+    * id : uuid <<PK>>
+    --
+    * portfolio_id : uuid <<FK>>
+    * institution : varchar
+    * degree : varchar
+    * duration : varchar
+    gpa : varchar
+    highlights : jsonb
+    * sort_order : integer
+}
+
+entity "PortfolioProjects" as projects {
+    * id : uuid <<PK>>
+    --
+    * portfolio_id : uuid <<FK>>
+    * name : varchar
+    description : text
+    technologies : jsonb
+    link : varchar
+    image_url : varchar
+    * sort_order : integer
+}
+
+entity "PortfolioCertifications" as certifications {
+    * id : uuid <<PK>>
+    --
+    * portfolio_id : uuid <<FK>>
+    * name : varchar
+    * sort_order : integer
+}
+
+entity "CustomizationSettings" as customization {
+    * id : uuid <<PK>>
+    --
+    * portfolio_id : uuid <<FK>>
+    * primary_color : varchar
+    * secondary_color : varchar
+    * accent_color : varchar
+    * background_color : varchar
+    * surface_color : varchar
+    * text_color : varchar
+    * text_secondary_color : varchar
+    * gradient_colors : jsonb
+    * heading_font : varchar
+    * body_font : varchar
+    * mono_font : varchar
+    * heading_weight : integer
+    * body_weight : integer
+    * layout_type : varchar
+    * animation_profile_id : varchar <<FK>>
+    * glassmorphism_enabled : boolean
+    * glassmorphism_blur : integer
+    * glassmorphism_opacity : float
+    * shadow_level : varchar
+    * aurora_enabled : boolean
+    * aurora_colors : jsonb
+    * mesh_gradient_enabled : boolean
+    * mesh_gradient_colors : jsonb
+    * bento_grid_enabled : boolean
+    * bento_grid_columns : integer
+    * spotlight_enabled : boolean
+    * pattern_type : varchar
+    * created_at : timestamp
+    * updated_at : timestamp
+}
+
+entity "Templates" as templates {
+    * id : varchar <<PK>>
+    --
+    * name : varchar
+    * description : text
+    * preview_url : varchar
+    * tags : jsonb
+    * recommended_for : jsonb
+    * layout_type : varchar
+    * default_colors : jsonb
+    * default_fonts : jsonb
+    * animation_profile_id : varchar <<FK>>
+    * visual_style : jsonb
+    * supports_image : boolean
+    * is_premium : boolean
+    * created_at : timestamp
+}
+
+entity "AnimationProfiles" as animProfiles {
+    * id : varchar <<PK>>
+    --
+    * name : varchar
+    * scroll_type : varchar
+    * scroll_threshold : float
+    * scroll_duration : integer
+    * scroll_easing : varchar
+    * scroll_once : boolean
+    * hover_enabled : boolean
+    * hover_scale : float
+    * hover_shadow : varchar
+    * hover_glow : varchar
+    * hover_lift : integer
+    * hover_tilt : boolean
+    * transition_type : varchar
+    * transition_duration : integer
+    * stagger_enabled : boolean
+    * stagger_delay : integer
+    * stagger_increment : integer
+}
+
+entity "SectionDefinitions" as sectionDefs {
+    * id : uuid <<PK>>
+    --
+    * template_id : varchar <<FK>>
+    * section_type : varchar
+    * label : varchar
+    * icon : varchar
+    * required : boolean
+    * default_visible : boolean
+    * default_order : integer
+    * layout_variant : varchar
+    * columns : integer
+    * gap : integer
+}
+
+entity "UploadedImages" as images {
+    * id : uuid <<PK>>
+    --
+    * user_id : uuid <<FK>>
+    * portfolio_id : uuid <<FK>>
+    * original_url : varchar
+    * resized_url : varchar
+    * file_size : integer
+    * mime_type : varchar
+    * width : integer
+    * height : integer
+    * created_at : timestamp
+}
+
+' Relationships
+portfolios ||--o{ sections : "sections.portfolio_id -> portfolios.id"
+portfolios ||--o{ skills : "skills.portfolio_id -> portfolios.id"
+portfolios ||--o{ experience : "experience.portfolio_id -> portfolios.id"
+portfolios ||--o{ education : "education.portfolio_id -> portfolios.id"
+portfolios ||--o{ projects : "projects.portfolio_id -> portfolios.id"
+portfolios ||--o{ certifications : "certifications.portfolio_id -> portfolios.id"
+portfolios ||--|| customization : "customization.portfolio_id -> portfolios.id"
+portfolios }o--|| templates : "portfolios.template_id -> templates.id"
+portfolios ||--o{ images : "images.portfolio_id -> portfolios.id"
+
+templates ||--o{ sectionDefs : "section_definitions.template_id -> templates.id"
+templates }o--|| animProfiles : "templates.animation_profile_id -> animation_profiles.id"
+
+customization }o--|| animProfiles : "customization.animation_profile_id -> animation_profiles.id"
+
+@enduml

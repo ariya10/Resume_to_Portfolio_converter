@@ -1,0 +1,516 @@
+@startuml Class Diagram
+
+skinparam backgroundColor #1a1a2e
+skinparam fontColor #e6edf3
+skinparam classBackgroundColor #161b22
+skinparam classBorderColor #58a6ff
+skinparam arrowColor #8b949e
+skinparam classAttributeIconColor #58a6ff
+skinparam classStereotypeFontColor #8b949e
+
+' ============================================
+' DATA MODELS
+' ============================================
+
+class PortfolioData {
+    +name: string
+    +title: string
+    +email: string
+    +phone: string
+    +location: string
+    +linkedin: string
+    +github: string
+    +website: string
+    +summary: string
+    +bio: string
+    +skills: string[]
+    +skillCategories: Record<string, string[]>
+    +experience: Experience[]
+    +education: Education[]
+    +projects: Project[]
+    +certifications: string[]
+    +languages: string[]
+    +interests: string[]
+    +userType: UserType
+    +portfolioTone: string
+    +profileImage: string | null
+}
+
+class Experience {
+    +company: string
+    +role: string
+    +duration: string
+    +description: string
+    +highlights: string[]
+}
+
+class Education {
+    +institution: string
+    +degree: string
+    +duration: string
+    +gpa: string
+    +highlights: string[]
+}
+
+class Project {
+    +name: string
+    +description: string
+    +technologies: string[]
+    +link: string
+    +image: string | null
+}
+
+class UserType <<enumeration>> {
+    STUDENT
+    FRESHER
+    PROFESSIONAL
+    FREELANCER
+    DEVELOPER
+}
+
+' ============================================
+' TEMPLATE SYSTEM
+' ============================================
+
+class TemplateConfig {
+    +id: string
+    +name: string
+    +description: string
+    +preview: string
+    +tags: string[]
+    +recommendedFor: UserType[]
+    +layout: LayoutType
+    +defaultColors: ColorPalette
+    +defaultFonts: FontPairing
+    +animationProfile: AnimationProfile
+    +visualStyle: VisualStyleConfig
+    +supportsImage: boolean
+    +sections: SectionDefinition[]
+}
+
+class ColorPalette {
+    +primary: string
+    +secondary: string
+    +accent: string
+    +background: string
+    +surface: string
+    +text: string
+    +textSecondary: string
+    +gradient: string | null
+    +meshColors: string[]
+}
+
+class FontPairing {
+    +heading: string
+    +body: string
+    +mono: string
+    +headingWeight: number
+    +bodyWeight: number
+}
+
+class LayoutType <<enumeration>> {
+    SINGLE_COLUMN
+    SIDEBAR_LEFT
+    SIDEBAR_RIGHT
+    SPLIT_HERO
+    BENTO_GRID
+    MAGAZINE
+    TIMELINE_CENTER
+    CARD_STACK
+    FULLSCREEN_SECTIONS
+    ASYMMETRIC
+    MINIMAL_CENTER
+    DASHBOARD
+}
+
+class SectionDefinition {
+    +id: string
+    +type: SectionType
+    +label: string
+    +icon: string
+    +required: boolean
+    +defaultVisible: boolean
+    +order: number
+    +layout: SectionLayout
+    +animation: AnimationConfig
+}
+
+class SectionType <<enumeration>> {
+    HERO
+    ABOUT
+    SKILLS
+    EXPERIENCE
+    EDUCATION
+    PROJECTS
+    CERTIFICATIONS
+    CONTACT
+    TESTIMONIALS
+    ACHIEVEMENTS
+}
+
+class SectionLayout {
+    +variant: string
+    +columns: number
+    +gap: number
+    +padding: string
+}
+
+' ============================================
+' ANIMATION SYSTEM
+' ============================================
+
+class AnimationProfile {
+    +id: string
+    +name: string
+    +scrollTrigger: ScrollAnimationConfig
+    +hoverEffects: HoverAnimationConfig
+    +pageTransition: TransitionConfig
+    +stagger: StaggerConfig
+    +reducedMotion: AnimationConfig
+}
+
+class ScrollAnimationConfig {
+    +enabled: boolean
+    +type: ScrollAnimType
+    +threshold: number
+    +rootMargin: string
+    +duration: number
+    +easing: string
+    +once: boolean
+}
+
+class ScrollAnimType <<enumeration>> {
+    FADE_UP
+    FADE_IN
+    SLIDE_LEFT
+    SLIDE_RIGHT
+    SCALE_UP
+    FLIP
+    PARALLAX
+    BLUR_IN
+}
+
+class HoverAnimationConfig {
+    +enabled: boolean
+    +scale: number
+    +shadow: string
+    +glow: string | null
+    +lift: number
+    +borderGlow: boolean
+    +tilt: boolean
+    +duration: number
+}
+
+class TransitionConfig {
+    +type: TransitionType
+    +duration: number
+    +easing: string
+    +staggerDelay: number
+}
+
+class TransitionType <<enumeration>> {
+    FADE
+    SLIDE
+    MORPH
+    BLUR
+    NONE
+}
+
+class StaggerConfig {
+    +enabled: boolean
+    +delay: number
+    +increment: number
+    +maxStagger: number
+}
+
+class AnimationConfig {
+    +duration: number
+    +easing: string
+    +delay: number
+}
+
+' ============================================
+' VISUAL STYLE SYSTEM
+' ============================================
+
+class VisualStyleConfig {
+    +gradients: GradientConfig[]
+    +glassmorphism: GlassmorphismConfig | null
+    +shadows: ShadowConfig
+    +bentoGrid: BentoGridConfig | null
+    +aurora: AuroraConfig | null
+    +meshGradient: MeshGradientConfig | null
+    +spotlight: SpotlightConfig | null
+    +patterns: PatternType[]
+}
+
+class GradientConfig {
+    +type: GradientType
+    +colors: string[]
+    +angle: number
+    +opacity: number
+    +animated: boolean
+}
+
+class GradientType <<enumeration>> {
+    LINEAR
+    RADIAL
+    CONIC
+    MESH
+}
+
+class GlassmorphismConfig {
+    +enabled: boolean
+    +blur: number
+    +opacity: number
+    +borderColor: string
+    +borderOpacity: number
+    +shadow: string
+}
+
+class ShadowConfig {
+    +level: ShadowLevel
+    +color: string
+    +spread: number
+    +offsetY: number
+}
+
+class ShadowLevel <<enumeration>> {
+    NONE
+    SM
+    MD
+    LG
+    XL
+    GLOW
+}
+
+class BentoGridConfig {
+    +enabled: boolean
+    +columns: number
+    +rows: number
+    +gap: number
+    +cellSpans: CellSpan[]
+}
+
+class CellSpan {
+    +sectionId: string
+    +colSpan: number
+    +rowSpan: number
+}
+
+class AuroraConfig {
+    +enabled: boolean
+    +colors: string[]
+    +speed: number
+    +blur: number
+    +opacity: number
+}
+
+class MeshGradientConfig {
+    +enabled: boolean
+    +colors: string[]
+    +points: number
+    +speed: number
+}
+
+class SpotlightConfig {
+    +enabled: boolean
+    +color: string
+    +size: number
+    +followCursor: boolean
+}
+
+class PatternType <<enumeration>> {
+    DOTS
+    GRID
+    DIAGONAL
+    CIRCLES
+    WAVES
+    NONE
+}
+
+' ============================================
+' CUSTOMIZATION / EDITOR SYSTEM
+' ============================================
+
+class CustomizationOptions {
+    +colors: ColorPalette
+    +fonts: FontPairing
+    +sections: SectionInstance[]
+    +animation: AnimationProfile
+    +visualStyle: VisualStyleConfig
+    +profileImage: string | null
+    +layout: LayoutType
+}
+
+class SectionInstance {
+    +id: string
+    +type: SectionType
+    +visible: boolean
+    +order: number
+    +customContent: Record<string, any>
+    +layout: SectionLayout
+    +animation: AnimationConfig
+}
+
+class EditorState {
+    +activeSection: string | null
+    +activePanel: PanelType
+    +draggedSection: string | null
+    +hoveredSection: string | null
+    +selectedElement: string | null
+    +viewport: ViewportSize
+    +isDragging: boolean
+    +undoStack: CustomizationOptions[]
+    +redoStack: CustomizationOptions[]
+}
+
+class PanelType <<enumeration>> {
+    TEMPLATES
+    COMPONENTS
+    STYLES
+    ANIMATIONS
+    LAYOUT
+}
+
+class ViewportSize <<enumeration>> {
+    DESKTOP
+    TABLET
+    MOBILE
+}
+
+' ============================================
+' TEMPLATE REGISTRY
+' ============================================
+
+class TemplateRegistry {
+    -templates: Map<string, TemplateConfig>
+    -categories: Map<UserType, string[]>
+    +register(template: TemplateConfig): void
+    +getById(id: string): TemplateConfig | null
+    +getByUserType(type: UserType): TemplateConfig[]
+    +getAll(): TemplateConfig[]
+    +getCategories(): Map<UserType, string[]>
+    +search(query: string): TemplateConfig[]
+}
+
+' ============================================
+' RENDERER
+' ============================================
+
+class TemplateRenderer {
+    -registry: TemplateRegistry
+    -animationController: AnimationController
+    +render(data: PortfolioData, config: TemplateConfig, customization: CustomizationOptions): string
+    +renderSection(section: SectionInstance, data: PortfolioData, config: TemplateConfig): string
+    +injectAnimations(html: string, profile: AnimationProfile): string
+    +injectVisualStyles(html: string, style: VisualStyleConfig): string
+    +injectImage(html: string, imageUrl: string, config: TemplateConfig): string
+    +generateCSS(config: TemplateConfig, customization: CustomizationOptions): string
+    +generateResponsiveCSS(): string
+}
+
+' ============================================
+' ANIMATION CONTROLLER
+' ============================================
+
+class AnimationController {
+    +observer: IntersectionObserver | null
+    +initialize(container: HTMLElement, profile: AnimationProfile): void
+    +observe(elements: Element[]): void
+    +disconnect(): void
+    +createScrollAnimation(el: Element, config: ScrollAnimationConfig): void
+    +createHoverEffect(el: Element, config: HoverAnimationConfig): void
+    +createStagger(elements: Element[], config: StaggerConfig): void
+    +applyReducedMotion(): void
+}
+
+' ============================================
+' IMAGE SERVICE
+' ============================================
+
+class ImageService {
+    +upload(file: File): Promise<string>
+    +validate(file: File): ValidationResult
+    +resize(file: File, maxWidth: number, maxHeight: number): Promise<Blob>
+    +remove(url: string): Promise<void>
+    +getPlaceholder(type: UserType): string
+}
+
+class ValidationResult {
+    +valid: boolean
+    +errors: string[]
+    +maxSize: number
+    +allowedTypes: string[]
+}
+
+' ============================================
+' RELATIONSHIPS
+' ============================================
+
+PortfolioData *-- Experience
+PortfolioData *-- Education
+PortfolioData *-- Project
+PortfolioData --> UserType
+
+TemplateConfig *-- ColorPalette
+TemplateConfig *-- FontPairing
+TemplateConfig *-- VisualStyleConfig
+TemplateConfig *-- AnimationProfile
+TemplateConfig *-- SectionDefinition
+TemplateConfig --> LayoutType
+TemplateConfig --> UserType
+
+SectionDefinition --> SectionType
+SectionDefinition *-- SectionLayout
+SectionDefinition *-- AnimationConfig
+
+AnimationProfile *-- ScrollAnimationConfig
+AnimationProfile *-- HoverAnimationConfig
+AnimationProfile *-- TransitionConfig
+AnimationProfile *-- StaggerConfig
+AnimationProfile *-- AnimationConfig
+
+ScrollAnimationConfig --> ScrollAnimType
+TransitionConfig --> TransitionType
+
+VisualStyleConfig *-- GradientConfig
+VisualStyleConfig *-- GlassmorphismConfig
+VisualStyleConfig *-- ShadowConfig
+VisualStyleConfig *-- BentoGridConfig
+VisualStyleConfig *-- AuroraConfig
+VisualStyleConfig *-- MeshGradientConfig
+VisualStyleConfig *-- SpotlightConfig
+VisualStyleConfig --> PatternType
+
+GradientConfig --> GradientType
+ShadowConfig --> ShadowLevel
+BentoGridConfig *-- CellSpan
+
+CustomizationOptions *-- ColorPalette
+CustomizationOptions *-- FontPairing
+CustomizationOptions *-- SectionInstance
+CustomizationOptions *-- AnimationProfile
+CustomizationOptions *-- VisualStyleConfig
+CustomizationOptions --> LayoutType
+
+SectionInstance --> SectionType
+SectionInstance *-- SectionLayout
+SectionInstance *-- AnimationConfig
+
+EditorState --> PanelType
+EditorState --> ViewportSize
+
+TemplateRegistry o-- TemplateConfig
+TemplateRenderer --> TemplateRegistry
+TemplateRenderer --> AnimationController
+TemplateRenderer --> TemplateConfig
+TemplateRenderer --> CustomizationOptions
+
+AnimationController --> ScrollAnimationConfig
+AnimationController --> HoverAnimationConfig
+AnimationController --> StaggerConfig
+
+ImageService --> ValidationResult
+
+@enduml
