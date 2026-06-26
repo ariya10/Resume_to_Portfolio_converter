@@ -6,16 +6,16 @@ export default function CanvaRightPanel() {
   const { rightPanelTab } = useEditorStore();
 
   return (
-    <div className="h-full flex flex-col bg-[#F7F7F7] border-l border-black/10">
-      <div className="px-3 py-3 border-b border-black/10 bg-white">
+    <div className="h-full flex flex-col bg-[#0F1113] border-l border-black/20 text-slate-200">
+      <div className="px-3 py-3 border-b border-black/20 bg-transparent">
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-[12px] font-black uppercase tracking-widest text-black/60">
+            <div className="text-[12px] font-black uppercase tracking-widest text-slate-400">
               Inspector
             </div>
-            <div className="text-[16px] font-black text-black">Design</div>
+            <div className="text-[16px] font-black text-white">Design</div>
           </div>
-          <div className="text-[12px] font-black text-black/60" aria-hidden>
+          <div className="text-[12px] font-black text-slate-400" aria-hidden>
             {/* reserved */}
           </div>
         </div>

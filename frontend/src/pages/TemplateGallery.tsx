@@ -176,9 +176,21 @@ function PreviewModal({ template, portfolioData, onClose, onSelect }: PreviewMod
         </div>
 
         {/* Preview */}
-        <div className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-900 to-black">
-          <div className="p-4 h-full">
-            <div className="rounded-xl overflow-hidden border border-white/10 h-full bg-white">
+        <div
+          className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-900 to-black"
+          onWheel={(e) => {
+            try {
+              const t = e.currentTarget as HTMLElement;
+              // Manually scroll the container to ensure wheel events move content
+              t.scrollTop += e.deltaY;
+              e.stopPropagation();
+            } catch (err) {
+              /* ignore */
+            }
+          }}
+        >
+          <div className="p-4">
+            <div className="rounded-xl overflow-hidden border border-white/10 bg-white">
               <PortfolioPreview data={portfolioData} customization={customization} />
             </div>
           </div>
@@ -318,12 +330,14 @@ export default function TemplateGallery() {
   }, [searchQuery, selectedCategory]);
 
   const handleSelectTemplate = (templateId: string) => {
+    const template = THEME_PRESETS.find((t) => t.id === templateId);
     navigate("/builder", {
       state: {
         parsedData: state?.parsedData,
         enhancedData: state?.enhancedData,
         fileName: state?.fileName,
         selectedTemplateId: templateId,
+        projectTemplate: template,
       },
     });
   };

@@ -15,6 +15,33 @@
 
   <body>
     <div id="root"></div>
+    <script>
+      // Capture errors that happen before modules run (import-time/runtime) and stash them
+      window.addEventListener('error', function (e) {
+        try {
+          (window as any).__early_error = {
+            message: e.message,
+            filename: e.filename,
+            lineno: e.lineno,
+            colno: e.colno,
+            stack: (e.error && e.error.stack) || null,
+          };
+        } catch (err) {
+          /* ignore */
+        }
+      });
+      window.addEventListener('unhandledrejection', function (ev) {
+        try {
+          (window as any).__early_promise_rejection = {
+            reason: ev.reason && (ev.reason.message || String(ev.reason)),
+            stack: ev.reason && ev.reason.stack ? ev.reason.stack : null,
+          };
+        } catch (err) {
+          /* ignore */
+        }
+      });
+      // debug badge removed
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

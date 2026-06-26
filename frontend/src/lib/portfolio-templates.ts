@@ -11,7 +11,7 @@ export interface PortfolioData {
   profileImage: string | null;
 }
 
-export interface SectionInstance { id: string; type: string; label: string; visible: boolean; }
+export interface SectionInstance { id: string; type: string; label: string; visible: boolean; locked?: boolean; collapsed?: boolean }
 
 export interface CustomizationOptions {
   themeId: string;
@@ -50,6 +50,11 @@ export interface CustomizationOptions {
   };
   imageShape?: "circle" | "rounded" | "square";
   imageSize?: "small" | "medium" | "large";
+  profileImageEffect?: "none" | "grayscale" | "sepia" | "vintage" | "duotone" | "neon";
+  profileImageAnimation?: "none" | "float" | "spin" | "pulse" | "tilt";
+  profileImageCropScale?: number;
+  profileImageCropX?: number;
+  profileImageCropY?: number;
 }
 
 export const DEFAULT_SECTIONS: SectionInstance[] = [
@@ -243,6 +248,189 @@ export const THEME_PRESETS: ThemePreset[] = [
       { id: "arch-forest", name: "Forest Grid", colors: { primary: "#2E7D32", secondary: "#0A1F0B", accent: "#81C784", background: "#020B03", surface: "#071209", text: "#E8F5E9", textSecondary: "#66BB6A" } },
     ]
   },
+  // ─── 10 New Standard Templates ──────────────────────────────────
+  {
+    id: "modern-developer", name: "Modern Developer",
+    description: "Dark tech aesthetic, grid overlays, monospace highlights.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#3B82F6", secondary: "#1E293B", accent: "#60A5FA", background: "#0B0F19", surface: "#111B2D", text: "#F3F4F6", textSecondary: "#9CA3AF" },
+    colorVariants: [
+      { id: "modern-dev-blue", name: "Ocean Tech", colors: { primary: "#3B82F6", secondary: "#1E293B", accent: "#60A5FA", background: "#0B0F19", surface: "#111B2D", text: "#F3F4F6", textSecondary: "#9CA3AF" } },
+      { id: "modern-dev-cyan", name: "Neon Matrix", colors: { primary: "#06B6D4", secondary: "#0F2D37", accent: "#22D3EE", background: "#030A0D", surface: "#08171C", text: "#E0F2FE", textSecondary: "#67E8F9" } },
+    ]
+  },
+  {
+    id: "creative-designer", name: "Creative Designer",
+    description: "Big display typefaces, asymmetrical grid sections, aesthetic gaps.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#EC4899", secondary: "#25121B", accent: "#F472B6", background: "#FAF8F9", surface: "#FFF1F6", text: "#1A0610", textSecondary: "#7A6872" },
+    colorVariants: [
+      { id: "creative-des-pink", name: "Aesthetic Rose", colors: { primary: "#EC4899", secondary: "#25121B", accent: "#F472B6", background: "#FAF8F9", surface: "#FFF1F6", text: "#1A0610", textSecondary: "#7A6872" } },
+    ]
+  },
+  {
+    id: "freelancer-portfolio", name: "Freelancer",
+    description: "Client acquisition focus, testimonial grids, pricing cards.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#10B981", secondary: "#064E3B", accent: "#34D399", background: "#FFFFFF", surface: "#F4FDF9", text: "#062A1F", textSecondary: "#4B6B61" },
+    colorVariants: [
+      { id: "freelancer-green", name: "Mint Freelancer", colors: { primary: "#10B981", secondary: "#064E3B", accent: "#34D399", background: "#FFFFFF", surface: "#F4FDF9", text: "#062A1F", textSecondary: "#4B6B61" } },
+    ]
+  },
+  {
+    id: "photographer-portfolio", name: "Photographer",
+    description: "Rich dark layout focusing on deep photo blocks and simple text.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#FFFFFF", secondary: "#222222", accent: "#888888", background: "#0A0A0A", surface: "#141414", text: "#F5F5F5", textSecondary: "#999999" },
+    colorVariants: [
+      { id: "photo-dark", name: "Mono Gallery", colors: { primary: "#FFFFFF", secondary: "#222222", accent: "#888888", background: "#0A0A0A", surface: "#141414", text: "#F5F5F5", textSecondary: "#999999" } },
+    ]
+  },
+  {
+    id: "digital-marketer", name: "Digital Marketer",
+    description: "Dynamic data visualizations, impact statistics, and conversion elements.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#FF6B00", secondary: "#4A2000", accent: "#FFA500", background: "#FAF9F6", surface: "#FFF7F0", text: "#2B1100", textSecondary: "#7A6352" },
+    colorVariants: [
+      { id: "marketer-orange", name: "Growth Orange", colors: { primary: "#FF6B00", secondary: "#4A2000", accent: "#FFA500", background: "#FAF9F6", surface: "#FFF7F0", text: "#2B1100", textSecondary: "#7A6352" } },
+    ]
+  },
+  {
+    id: "ai-engineer", name: "AI Engineer",
+    description: "Neural network pattern borders, terminal blocks, matrix style highlights.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#8B5CF6", secondary: "#231045", accent: "#C084FC", background: "#07040D", surface: "#0E071A", text: "#F5F3FF", textSecondary: "#A78BFA" },
+    colorVariants: [
+      { id: "ai-purple", name: "Deep Purple", colors: { primary: "#8B5CF6", secondary: "#231045", accent: "#C084FC", background: "#07040D", surface: "#0E071A", text: "#F5F3FF", textSecondary: "#A78BFA" } },
+    ]
+  },
+  {
+    id: "personal-brand", name: "Personal Brand",
+    description: "Warm branding layouts, email lists, content widgets, video covers.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#D97706", secondary: "#451A03", accent: "#F59E0B", background: "#FFFBEB", surface: "#FEF3C7", text: "#78350F", textSecondary: "#B45309" },
+    colorVariants: [
+      { id: "brand-warm", name: "Warm Amber", colors: { primary: "#D97706", secondary: "#451A03", accent: "#F59E0B", background: "#FFFBEB", surface: "#FEF3C7", text: "#78350F", textSecondary: "#B45309" } },
+    ]
+  },
+  {
+    id: "minimal-professional", name: "Minimal Professional",
+    description: "Clean modern serif layout, grid portfolio, sleek corporate look.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#1E3A8A", secondary: "#1E293B", accent: "#3B82F6", background: "#FFFFFF", surface: "#F8FAFC", text: "#0F172A", textSecondary: "#475569" },
+    colorVariants: [
+      { id: "min-prof-classic", name: "Classic Navy", colors: { primary: "#1E3A8A", secondary: "#1E293B", accent: "#3B82F6", background: "#FFFFFF", surface: "#F8FAFC", text: "#0F172A", textSecondary: "#475569" } },
+    ]
+  },
+  {
+    id: "premium-glassmorphism", name: "Premium Glassmorphism",
+    description: "Frosted translucent sheets, vibrant mesh lighting, responsive glow.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#6366F1", secondary: "#312E81", accent: "#FF007A", background: "#0B0816", surface: "rgba(255,255,255,0.03)", text: "#FFFFFF", textSecondary: "#A5B4FC" },
+    colorVariants: [
+      { id: "glass-glow", name: "Neon Glass", colors: { primary: "#6366F1", secondary: "#312E81", accent: "#FF007A", background: "#0B0816", surface: "rgba(255,255,255,0.03)", text: "#FFFFFF", textSecondary: "#A5B4FC" } },
+    ]
+  },
+  {
+    id: "bespoke-agency", name: "Bespoke Agency",
+    description: "Bold headings, thick dark borders, block designs.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#111111", secondary: "#222222", accent: "#F35F30", background: "#FAF6F0", surface: "#EFEBE4", text: "#111111", textSecondary: "#444444" },
+    colorVariants: [
+      { id: "bespoke-standard", name: "Bespoke Amber", colors: { primary: "#111111", secondary: "#222222", accent: "#F35F30", background: "#FAF6F0", surface: "#EFEBE4", text: "#111111", textSecondary: "#444444" } },
+    ]
+  },
+  // ─── 10 New Advanced 3D Templates ──────────────────────────────
+  {
+    id: "interactive-3d-dev", name: "Interactive 3D Developer",
+    description: "3D developer tools floating on background shifting with hover and scroll.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#60A5FA", secondary: "#1E293B", accent: "#38BDF8", background: "#030712", surface: "#0B0F19", text: "#F3F4F6", textSecondary: "#9CA3AF" },
+    colorVariants: [
+      { id: "3d-dev-blue", name: "Dev Cosmic", colors: { primary: "#60A5FA", secondary: "#1E293B", accent: "#38BDF8", background: "#030712", surface: "#0B0F19", text: "#F3F4F6", textSecondary: "#9CA3AF" } },
+    ]
+  },
+  {
+    id: "floating-3d-card", name: "Floating 3D Card",
+    description: "Center visual 3D card layout featuring your bio and details.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#818CF8", secondary: "#312E81", accent: "#F472B6", background: "#070514", surface: "#0F0C24", text: "#F3F4F6", textSecondary: "#C7D2FE" },
+    colorVariants: [
+      { id: "3d-card-indigo", name: "Glow Tilt", colors: { primary: "#818CF8", secondary: "#312E81", accent: "#F472B6", background: "#070514", surface: "#0F0C24", text: "#F3F4F6", textSecondary: "#C7D2FE" } },
+    ]
+  },
+  {
+    id: "futuristic-3d-theme", name: "Futuristic 3D Grid",
+    description: "Connected floating point nodes constellation reacting to mouse coordinates.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#00F5FF", secondary: "#0B192C", accent: "#FF00AA", background: "#020710", surface: "#071324", text: "#E0F2FE", textSecondary: "#38BDF8" },
+    colorVariants: [
+      { id: "future-neon", name: "Neon Space", colors: { primary: "#00F5FF", secondary: "#0B192C", accent: "#FF00AA", background: "#020710", surface: "#071324", text: "#E0F2FE", textSecondary: "#38BDF8" } },
+    ]
+  },
+  {
+    id: "cyberpunk-3d-theme", name: "Cyberpunk 3D Rain",
+    description: "Interactive digital matrix columns rain background with glowing meshes.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#39FF14", secondary: "#002B00", accent: "#00FF41", background: "#020A02", surface: "#051A05", text: "#E2FFE2", textSecondary: "#44D344" },
+    colorVariants: [
+      { id: "cyber-rain-green", name: "Green Rain", colors: { primary: "#39FF14", secondary: "#002B00", accent: "#00FF41", background: "#020A02", surface: "#051A05", text: "#E2FFE2", textSecondary: "#44D344" } },
+    ]
+  },
+  {
+    id: "holographic-3d-theme", name: "Holographic Crystal",
+    description: "3D central wireframe refracting crystal object floating in space.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#C084FC", secondary: "#2E1065", accent: "#F472B6", background: "#05020C", surface: "#0F071D", text: "#FAF5FF", textSecondary: "#D8B4FE" },
+    colorVariants: [
+      { id: "holo-crystal-purple", name: "Neon Crystal", colors: { primary: "#C084FC", secondary: "#2E1065", accent: "#F472B6", background: "#05020C", surface: "#0F071D", text: "#FAF5FF", textSecondary: "#D8B4FE" } },
+    ]
+  },
+  {
+    id: "cube-navigation-3d", name: "3D Navigation Cube",
+    description: "Fully 3D rotating navigation cube. Click faces to jump between details.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#10B981", secondary: "#064E3B", accent: "#F59E0B", background: "#040D0A", surface: "#0C1F18", text: "#ECFDF5", textSecondary: "#34D399" },
+    colorVariants: [
+      { id: "cube-emerald", name: "Emerald Cube", colors: { primary: "#10B981", secondary: "#064E3B", accent: "#F59E0B", background: "#040D0A", surface: "#0C1F18", text: "#ECFDF5", textSecondary: "#34D399" } },
+    ]
+  },
+  {
+    id: "animated-particle-3d", name: "Animated Particle Sphere",
+    description: "Responsive particle wave grid and interactive sphere elements.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#FF3366", secondary: "#3F0015", accent: "#FFAA00", background: "#0F0006", surface: "#1F010E", text: "#FFF0F4", textSecondary: "#FF80A0" },
+    colorVariants: [
+      { id: "particle-wave-red", name: "Red Wave", colors: { primary: "#FF3366", secondary: "#3F0015", accent: "#FFAA00", background: "#0F0006", surface: "#1F010E", text: "#FFF0F4", textSecondary: "#FF80A0" } },
+    ]
+  },
+  {
+    id: "immersive-hero-3d", name: "Immersive 3D Waves",
+    description: "A continuous interactive 3D fluid ripple simulation grid canvas.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#3B82F6", secondary: "#1E3A8A", accent: "#10B981", background: "#040A1A", surface: "#08132F", text: "#F0F4FF", textSecondary: "#93C5FD" },
+    colorVariants: [
+      { id: "fluid-blue", name: "Sea Waves", colors: { primary: "#3B82F6", secondary: "#1E3A8A", accent: "#10B981", background: "#040A1A", surface: "#08132F", text: "#F0F4FF", textSecondary: "#93C5FD" } },
+    ]
+  },
+  {
+    id: "glassmorphism-3d-theme", name: "3D Refractive Glass",
+    description: "Floating 3D glass panels refracting underlying light meshes.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#A78BFA", secondary: "#31105E", accent: "#F472B6", background: "#090514", surface: "rgba(255, 255, 255, 0.05)", text: "#F5F3FF", textSecondary: "#C4B5FD" },
+    colorVariants: [
+      { id: "glass-3d-glow", name: "Lavender Glass", colors: { primary: "#A78BFA", secondary: "#31105E", accent: "#F472B6", background: "#090514", surface: "rgba(255, 255, 255, 0.05)", text: "#F5F3FF", textSecondary: "#C4B5FD" } },
+    ]
+  },
+  {
+    id: "premium-motion-3d", name: "Premium 3D Physics",
+    description: "Physics playground. Interactive spheres roll and bounce with drag.",
+    sections: DEFAULT_SECTIONS,
+    defaultColors: { primary: "#F59E0B", secondary: "#451A03", accent: "#10B981", background: "#0B0703", surface: "#150E06", text: "#FFFDF5", textSecondary: "#FBBF24" },
+    colorVariants: [
+      { id: "physics-gold", name: "Bounce Amber", colors: { primary: "#F59E0B", secondary: "#451A03", accent: "#10B981", background: "#0B0703", surface: "#150E06", text: "#FFFDF5", textSecondary: "#FBBF24" } },
+    ]
+  }
 ];
 
 // ─── Helper Functions ─────────────────────────────────────────────
@@ -295,5 +483,10 @@ export const getDefaultCustomization = (): CustomizationOptions => {
     },
     imageShape: "circle",
     imageSize: "medium",
+    profileImageEffect: "none",
+    profileImageAnimation: "none",
+    profileImageCropScale: 1,
+    profileImageCropX: 0,
+    profileImageCropY: 0,
   };
 };

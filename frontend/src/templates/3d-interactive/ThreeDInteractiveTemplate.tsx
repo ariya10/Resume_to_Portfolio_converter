@@ -1,64 +1,139 @@
-import React, { useRef, useMemo } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, Float, MeshDistortMaterial, Sphere, Stars } from '@react-three/drei';
+import React, { useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { type PortfolioData, type CustomizationOptions } from "@/lib/portfolio-templates";
-import * as THREE from 'three';
 
 interface TemplateProps {
   data: PortfolioData;
   customization: CustomizationOptions;
 }
 
-// 3D Background Component
-// 3D Background Component
-function SceneBackground({ customization }: { customization: CustomizationOptions }) {
-  const meshRef = useRef<THREE.Mesh>(null);
+function Canvas2DInteractiveBackground({ customization }: { customization: CustomizationOptions }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const primaryColor = customization.colors.primary || '#4338ca';
   const accentColor = customization.colors.accent || '#ec4899';
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    class Orb {
+      x: number;
+      y: number;
+      size: number;
+      speedX: number;
+      speedY: number;
+      color: string;
+      angle: number;
+      spinSpeed: number;
+
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.size = Math.random() * 80 + 40;
+        this.speedX = (Math.random() - 0.5) * 1.0;
+        this.speedY = (Math.random() - 0.5) * 1.0;
+        this.color = Math.random() > 0.5 ? primaryColor : accentColor;
+        this.angle = Math.random() * Math.PI * 2;
+        this.spinSpeed = (Math.random() - 0.5) * 0.01;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.angle += this.spinSpeed;
+
+        if (this.x < -this.size || this.x > width + this.size) this.speedX *= -1;
+        if (this.y < -this.size || this.y > height + this.size) this.speedY *= -1;
+      }
+
+      draw() {
+        if (!ctx) return;
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.beginPath();
+        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size);
+        grad.addColorStop(0, this.color + '25'); // Low opacity glow
+        grad.addColorStop(0.5, this.color + '0f');
+        grad.addColorStop(1, 'transparent');
+        ctx.fillStyle = grad;
+        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
     }
-  });
 
-  return (
-    <>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={1} />
-      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-      
-      <Float speed={1.5} rotationIntensity={1} floatIntensity={2}>
-        <Sphere ref={meshRef} args={[1.5, 64, 64]} position={[2, 0, -5]}>
-          <MeshDistortMaterial 
-            color={primaryColor} 
-            attach="material" 
-            distort={0.4} 
-            speed={2} 
-            roughness={0.2}
-            metalness={0.8}
-          />
-        </Sphere>
-      </Float>
-      
-      <Float speed={2} rotationIntensity={1.5} floatIntensity={2}>
-        <Sphere args={[0.8, 32, 32]} position={[-3, -2, -3]}>
-          <MeshDistortMaterial 
-            color={accentColor} 
-            attach="material" 
-            distort={0.3} 
-            speed={3} 
-            roughness={0.4}
-            metalness={0.6}
-          />
-        </Sphere>
-      </Float>
+    const orbs: Orb[] = Array.from({ length: 12 }, () => new Orb());
 
-      <Environment preset="city" />
-    </>
-  );
+    let mouse = { x: width / 2, y: height / 2 };
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Render dynamic grids
+      ctx.strokeStyle = `${primaryColor}06`;
+      ctx.lineWidth = 1;
+      const gridSize = 80;
+      for (let x = 0; x < width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // Interactive mouse focus highlight
+      const radialGlow = ctx.createRadialGradient(mouse.x, mouse.y, 5, mouse.x, mouse.y, 350);
+      radialGlow.addColorStop(0, `${primaryColor}1a`);
+      radialGlow.addColorStop(0.5, `${accentColor}0b`);
+      radialGlow.addColorStop(1, 'transparent');
+      ctx.fillStyle = radialGlow;
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 350, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Draw ambient elements
+      orbs.forEach((orb) => {
+        orb.update();
+        orb.draw();
+      });
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [primaryColor, accentColor]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block z-0" />;
 }
 
 export default function ThreeDInteractiveTemplate({ data, customization }: TemplateProps) {
@@ -69,11 +144,9 @@ export default function ThreeDInteractiveTemplate({ data, customization }: Templ
     <div ref={containerRef} className="min-h-screen relative selection:text-white"
          style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-text)', fontFamily: 'var(--font-body)', selectionBackgroundColor: 'var(--color-primary)' }}>
       
-      {/* 3D Canvas Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-          <SceneBackground customization={customization} />
-        </Canvas>
+      {/* Canvas 2D Background instead of ThreeJS */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <Canvas2DInteractiveBackground customization={customization} />
       </div>
 
       {/* HTML Overlay Content */}
@@ -217,4 +290,3 @@ export default function ThreeDInteractiveTemplate({ data, customization }: Templ
     </div>
   );
 }
-

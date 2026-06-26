@@ -500,8 +500,23 @@ function AnimationsTab() {
 // ─── Image Tab ─────────────────────────────────────────────────────
 
 function ImageTab() {
-  const { customization, setProfileImage, setImageShape, setImageSize } = useEditorStore();
+  const {
+    customization,
+    setProfileImage,
+    setImageShape,
+    setImageSize,
+    setProfileImageEffect,
+    setProfileImageAnimation,
+    setProfileImageCrop,
+  } = useEditorStore();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const cropScale = customization.profileImageCropScale ?? 1;
+  const cropX = customization.profileImageCropX ?? 0;
+  const cropY = customization.profileImageCropY ?? 0;
+  const effect = customization.profileImageEffect ?? "none";
+  const anim = customization.profileImageAnimation ?? "none";
 
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -510,10 +525,11 @@ function ImageTab() {
       const reader = new FileReader();
       reader.onload = (ev) => {
         setProfileImage(ev.target?.result as string);
+        setProfileImageCrop(1, 0, 0); // Reset crop on new upload
       };
       reader.readAsDataURL(file);
     },
-    [setProfileImage]
+    [setProfileImage, setProfileImageCrop]
   );
 
   const shapes: { id: ImageShape; label: string }[] = [
@@ -528,25 +544,69 @@ function ImageTab() {
     { id: "large", label: "Large" },
   ];
 
+  const filterEffects = [
+    { id: "none", label: "Normal" },
+    { id: "grayscale", label: "B&W Noir" },
+    { id: "sepia", label: "Warm Sepia" },
+    { id: "vintage", label: "Retro Vintage" },
+    { id: "duotone", label: "Cyber Duotone" },
+    { id: "neon", label: "Neon Glow" },
+  ];
+
+  const hoverAnimations = [
+    { id: "none", label: "No Animation" },
+    { id: "float", label: "Smooth Floating" },
+    { id: "spin", label: "Slow Spin" },
+    { id: "pulse", label: "Pulse Glow" },
+    { id: "tilt", label: "3D Pointer Tilt" },
+  ];
+
+  // Helper styles based on selected filter
+  const getFilterStyle = (f: string) => {
+    switch (f) {
+      case "grayscale":
+        return "grayscale";
+      case "sepia":
+        return "sepia";
+      case "vintage":
+        return "sepia-[0.5] hue-rotate-[-30deg] saturate-[1.4]";
+      case "duotone":
+        return "grayscale sepia-[0.3] hue-rotate-[280deg] saturate-[3] contrast-[1.2]";
+      case "neon":
+        return "shadow-[0_0_15px_rgba(139,92,246,0.6)] border-violet-500";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div className="space-y-4">
       <p className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">Profile Image</p>
 
-      {/* Upload */}
+      {/* Upload & Preview */}
       <div className="space-y-2">
         {customization.profileImage ? (
-          <div className="relative">
-            <img
-              src={customization.profileImage}
-              alt="Profile"
-              className={cn(
-                "w-20 h-20 object-cover mx-auto border-2 border-violet-500/30",
-                customization.imageShape === "circle" ? "rounded-full" : customization.imageShape === "rounded" ? "rounded-xl" : "rounded"
-              )}
-            />
+          <div className="relative border border-white/10 p-4 rounded-xl bg-white/[0.02]">
+            <div className={cn(
+              "w-28 h-28 mx-auto relative overflow-hidden bg-black/20",
+              customization.imageShape === "circle" ? "rounded-full" : customization.imageShape === "rounded" ? "rounded-xl" : "rounded-none"
+            )}>
+              <img
+                src={customization.profileImage}
+                alt="Profile Preview"
+                className={cn(
+                  "w-full h-full object-cover origin-center transition-all duration-75",
+                  getFilterStyle(effect)
+                )}
+                style={{
+                  transform: `scale(${cropScale}) translate(${cropX}px, ${cropY}px)`,
+                }}
+              />
+            </div>
             <button
               onClick={() => setProfileImage(null)}
-              className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500/80 text-white flex items-center justify-center text-[10px] hover:bg-red-500"
+              className="absolute top-2 right-2 w-5 h-5 rounded-full bg-red-500/80 text-white flex items-center justify-center text-[10px] hover:bg-red-500"
+              title="Remove image"
             >
               ✕
             </button>
@@ -563,6 +623,82 @@ function ImageTab() {
         )}
         <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
       </div>
+
+      {customization.profileImage && (
+        <>
+          {/* Crop controls */}
+          <div className="space-y-3 p-3 rounded-lg border border-white/5 bg-white/[0.01]">
+            <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Interactive Crop & Position</p>
+            <div>
+              <Label className="text-[10px] text-slate-400 mb-1 block">Zoom/Scale: {cropScale.toFixed(1)}x</Label>
+              <Slider
+                value={[cropScale * 10]}
+                onValueChange={([v]) => setProfileImageCrop(v / 10, cropX, cropY)}
+                min={10}
+                max={30}
+                step={1}
+                className="py-1"
+              />
+            </div>
+            <div>
+              <Label className="text-[10px] text-slate-400 mb-1 block">X Offset: {cropX}px</Label>
+              <Slider
+                value={[cropX + 100]}
+                onValueChange={([v]) => setProfileImageCrop(cropScale, v - 100, cropY)}
+                min={0}
+                max={200}
+                step={2}
+                className="py-1"
+              />
+            </div>
+            <div>
+              <Label className="text-[10px] text-slate-400 mb-1 block">Y Offset: {cropY}px</Label>
+              <Slider
+                value={[cropY + 100]}
+                onValueChange={([v]) => setProfileImageCrop(cropScale, cropX, v - 100)}
+                min={0}
+                max={200}
+                step={2}
+                className="py-1"
+              />
+            </div>
+          </div>
+
+          {/* Filter Effects */}
+          <div>
+            <Label className="text-[11px] text-slate-300 mb-1 block">Visual Filter</Label>
+            <Select value={effect} onValueChange={(v) => setProfileImageEffect(v)}>
+              <SelectTrigger className="h-7 text-[11px] bg-white/5 border-white/10 text-slate-200">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-[#1A1A2E] border-white/10">
+                {filterEffects.map((f) => (
+                  <SelectItem key={f.id} value={f.id} className="text-slate-200 text-[11px] focus:bg-violet-500/20 focus:text-violet-200">
+                    {f.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Animations */}
+          <div>
+            <Label className="text-[11px] text-slate-300 mb-1 block">Image Animation / Effect</Label>
+            <Select value={anim} onValueChange={(v) => setProfileImageAnimation(v)}>
+              <SelectTrigger className="h-7 text-[11px] bg-white/5 border-white/10 text-slate-200">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-[#1A1A2E] border-white/10">
+                {hoverAnimations.map((ha) => (
+                  <SelectItem key={ha.id} value={ha.id} className="text-slate-200 text-[11px] focus:bg-violet-500/20 focus:text-violet-200">
+                    {ha.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </>
+      )}
 
       {/* Shape */}
       <div>

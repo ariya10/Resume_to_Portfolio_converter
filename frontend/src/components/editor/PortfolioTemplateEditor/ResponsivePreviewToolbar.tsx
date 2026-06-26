@@ -12,48 +12,49 @@ export function ResponsivePreviewToolbar({
 }) {
   return (
     <div className="flex items-center gap-2">
-      <div className="text-[11px] font-black uppercase tracking-widest text-white/60 mr-2">Preview</div>
+      <div className="text-[10px] font-black uppercase tracking-wider text-slate-500 mr-1.5">Viewport</div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5">
         <Button
           variant="outline"
-          className={`h-9 px-3 border-2 font-black text-[12px] ${
+          className={`h-8 px-2.5 font-bold text-[11px] rounded-lg transition-all ${
             mode === "desktop"
-              ? "border-white bg-white/10 text-white"
-              : "border-white/15 bg-white/5 text-white/70 hover:bg-white/10"
+              ? "border-slate-800 bg-slate-800 text-white shadow-sm hover:bg-slate-850 hover:text-white"
+              : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-850"
           }`}
           onClick={() => onModeChange("desktop")}
         >
-          <Monitor className="w-4 h-4 mr-2" />
+          <Monitor className="w-3.5 h-3.5 mr-1.5" />
           Desktop
         </Button>
 
         <Button
           variant="outline"
-          className={`h-9 px-3 border-2 font-black text-[12px] ${
+          className={`h-8 px-2.5 font-bold text-[11px] rounded-lg transition-all ${
             mode === "tablet"
-              ? "border-white bg-white/10 text-white"
-              : "border-white/15 bg-white/5 text-white/70 hover:bg-white/10"
+              ? "border-slate-800 bg-slate-800 text-white shadow-sm hover:bg-slate-850 hover:text-white"
+              : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-850"
           }`}
           onClick={() => onModeChange("tablet")}
         >
-          <Tablet className="w-4 h-4 mr-2" />
+          <Tablet className="w-3.5 h-3.5 mr-1.5" />
           Tablet
         </Button>
 
         <Button
           variant="outline"
-          className={`h-9 px-3 border-2 font-black text-[12px] ${
+          className={`h-8 px-2.5 font-bold text-[11px] rounded-lg transition-all ${
             mode === "mobile"
-              ? "border-white bg-white/10 text-white"
-              : "border-white/15 bg-white/5 text-white/70 hover:bg-white/10"
+              ? "border-slate-800 bg-slate-800 text-white shadow-sm hover:bg-slate-850 hover:text-white"
+              : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-850"
           }`}
           onClick={() => onModeChange("mobile")}
         >
-          <Smartphone className="w-4 h-4 mr-2" />
+          <Smartphone className="w-3.5 h-3.5 mr-1.5" />
           Mobile
         </Button>
       </div>
     </div>
   );
 }
+

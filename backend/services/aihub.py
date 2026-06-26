@@ -110,7 +110,21 @@ class AIHubService:
 
     def _use_ollama(self) -> bool:
         """Return True when Ollama is configured and should be used."""
+        # If client is configured and settings.app_ollama_url is not set, prefer client
+        if self.client and not settings.app_ollama_url:
+            return False
         return bool(self.ollama_url)
+
+    def _resolve_model(self, requested_model: str) -> str:
+        """Resolve a requested model name to the appropriate actual model name depending on provider."""
+        if self._use_ollama():
+            return requested_model if requested_model.startswith("llama") else OLLAMA_MODEL
+        else:
+            # Map non-Gemini models to default Gemini model
+            model = requested_model.lower()
+            if "gemini" in model:
+                return requested_model
+            return "gemini-2.0-flash"
 
     @staticmethod
     def _extract_ollama_text(response_data: dict) -> str:
@@ -155,7 +169,42 @@ class AIHubService:
         """
         try:
             messages = [self._convert_message(msg) for msg in request.messages]
-            if self._use_ollama():
+            use_ollama = self._use_ollama()
+            
+            if not use_ollama:
+                try:
+                    client = self._require_ai_client()
+                    resolved_model = self._resolve_model(request.model)
+                    response = await client.chat.completions.create(
+                        model=resolved_model,
+                        messages=messages,
+                        temperature=request.temperature,
+                        max_tokens=request.max_tokens,
+                        stream=False,
+                    )
+
+                    content = response.choices[0].message.content or ""
+                    usage = None
+                    if response.usage:
+                        usage = {
+                            "prompt_tokens": response.usage.prompt_tokens,
+                            "completion_tokens": response.usage.completion_tokens,
+                            "total_tokens": response.usage.total_tokens,
+                        }
+
+                    return GenTxtResponse(
+                        content=content,
+                        model=resolved_model,
+                        usage=usage,
+                    )
+                except Exception as api_err:
+                    if self.ollama_url:
+                        logger.warning(f"AI client gentxt failed ({api_err}). Falling back to Ollama...")
+                        use_ollama = True
+                    else:
+                        raise
+
+            if use_ollama:
                 model_name = request.model if request.model.startswith("llama") else OLLAMA_MODEL
                 payload = {
                     "model": model_name,
@@ -179,30 +228,6 @@ class AIHubService:
                     usage=None,
                 )
 
-            client = self._require_ai_client()
-            response = await client.chat.completions.create(
-                model=request.model,
-                messages=messages,
-                temperature=request.temperature,
-                max_tokens=request.max_tokens,
-                stream=False,
-            )
-
-            content = response.choices[0].message.content or ""
-            usage = None
-            if response.usage:
-                usage = {
-                    "prompt_tokens": response.usage.prompt_tokens,
-                    "completion_tokens": response.usage.completion_tokens,
-                    "total_tokens": response.usage.total_tokens,
-                }
-
-            return GenTxtResponse(
-                content=content,
-                model=request.model,
-                usage=usage,
-            )
-
         except Exception as e:
             logger.error(f"gentxt error: {e}")
             raise
@@ -217,25 +242,55 @@ class AIHubService:
         Yields:
             str: Generated text content chunk (plain text, not JSON).
         """
-        try:
-            client = self._require_ai_client()
-            messages = [self._convert_message(msg) for msg in request.messages]
+        use_ollama = self._use_ollama()
+        messages = [self._convert_message(msg) for msg in request.messages]
 
-            stream = await client.chat.completions.create(
-                model=request.model,
-                messages=messages,
-                temperature=request.temperature,
-                max_tokens=request.max_tokens,
-                stream=True,
-            )
+        if not use_ollama:
+            try:
+                client = self._require_ai_client()
+                resolved_model = self._resolve_model(request.model)
 
-            async for chunk in stream:
-                if chunk.choices and chunk.choices[0].delta.content:
-                    yield chunk.choices[0].delta.content
+                stream = await client.chat.completions.create(
+                    model=resolved_model,
+                    messages=messages,
+                    temperature=request.temperature,
+                    max_tokens=request.max_tokens,
+                    stream=True,
+                )
 
-        except Exception as e:
-            logger.error(f"gentxt_stream error: {e}")
-            raise
+                async for chunk in stream:
+                    if chunk.choices and chunk.choices[0].delta.content:
+                        yield chunk.choices[0].delta.content
+                return
+            except Exception as api_err:
+                if self.ollama_url:
+                    logger.warning(f"AI client gentxt_stream failed ({api_err}). Falling back to Ollama...")
+                    use_ollama = True
+                else:
+                    raise
+
+        if use_ollama:
+            model_name = request.model if request.model.startswith("llama") else OLLAMA_MODEL
+            payload = {
+                "model": model_name,
+                "messages": messages,
+                "temperature": request.temperature or 0.7,
+                "max_tokens": request.max_tokens or 4096,
+                "stream": True,
+            }
+            try:
+                async with httpx.AsyncClient(timeout=300) as client:
+                    async with client.stream("POST", f"{self.ollama_url}/api/chat", json=payload) as response:
+                        response.raise_for_status()
+                        async for line in response.aiter_lines():
+                            if line.strip():
+                                chunk_data = json.loads(line)
+                                chunk_text = chunk_data.get("message", {}).get("content", "")
+                                if chunk_text:
+                                    yield chunk_text
+            except Exception as e:
+                logger.error(f"gentxt_stream Ollama error: {e}")
+                raise
 
     @staticmethod
     def _extract_image_ref(item: object) -> str:
@@ -641,7 +696,7 @@ User instruction:
         return pdf_bytes, self._get_source_name(pdf, fallback="document.pdf")
 
     async def analyze_pdf(self, request: AnalyzePdfRequest) -> AnalyzePdfResponse:
-        """Analyze a single PDF with Ollama local LLM."""
+        """Analyze a single PDF with Ollama or configured AI client."""
         if not request.instruction or not request.instruction.strip():
             raise InvalidPdfInputError("instruction is required for PDF analysis.")
 
@@ -658,29 +713,59 @@ User instruction:
         # Combine the user prompt with the PDF text content
         combined_prompt = f"{user_prompt}\n\n--- PDF Content ---\n\n{pdf_text}"
         
-        # Call Ollama API
-        async with httpx.AsyncClient(timeout=300) as client:
-            response = await client.post(
-                f"{self.ollama_url}/api/chat",
-                json={
-                    "model": OLLAMA_MODEL,
-                    "messages": [
+        use_ollama = self._use_ollama()
+        result = ""
+        model_used = ""
+        
+        if not use_ollama:
+            try:
+                # Call OpenAI/Gemini API
+                client = self._require_ai_client()
+                model_used = self._resolve_model("gemini-2.0-flash")
+                response = await client.chat.completions.create(
+                    model=model_used,
+                    messages=[
                         {"role": "system", "content": PDF_SYSTEM_PROMPT},
                         {"role": "user", "content": combined_prompt},
                     ],
-                    "stream": False,
-                    "options": {
-                        "temperature": 0.0,
-                        "top_p": 0.9,
-                        "top_k": 40,
+                    temperature=0.0,
+                    max_tokens=8192,
+                    stream=False,
+                )
+                result = response.choices[0].message.content or ""
+            except Exception as api_err:
+                if self.ollama_url:
+                    logger.warning(f"AI client analyze_pdf failed ({api_err}). Falling back to Ollama...")
+                    use_ollama = True
+                else:
+                    raise
+
+        if use_ollama:
+            # Call Ollama API
+            async with httpx.AsyncClient(timeout=300) as client:
+                response = await client.post(
+                    f"{self.ollama_url}/api/chat",
+                    json={
+                        "model": OLLAMA_MODEL,
+                        "messages": [
+                            {"role": "system", "content": PDF_SYSTEM_PROMPT},
+                            {"role": "user", "content": combined_prompt},
+                        ],
+                        "stream": False,
+                        "options": {
+                            "temperature": 0.0,
+                            "top_p": 0.9,
+                            "top_k": 40,
+                        },
                     },
-                },
-            )
-            response.raise_for_status()
-            result_data = response.json()
-        
-        # Extract text from Ollama response
-        result = result_data.get("message", {}).get("content", "")
+                )
+                response.raise_for_status()
+                result_data = response.json()
+            
+            # Extract text from Ollama response
+            result = result_data.get("message", {}).get("content", "")
+            model_used = OLLAMA_MODEL
+
         if not result:
             raise RuntimeError("PDF analysis returned an empty result.")
 
@@ -690,7 +775,7 @@ User instruction:
             message=self._build_pdf_success_message(start, end, total_pages),
             pdf_name=pdf_name,
             mode=request.mode,
-            model=OLLAMA_MODEL,
+            model=model_used,
             page_start=start,
             page_end=end,
             total_pages=total_pages,
